@@ -1,0 +1,12 @@
+data
+old
+.DS_Store
+*~
+*.gz
+*.pdf
+*.blg
+*.bbl
+*.log
+*.aux
+*.fff
+*.lof
