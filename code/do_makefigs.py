@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 import ismrmrd
@@ -26,7 +25,12 @@ for fname in rfiles:
     plt.imshow(data, cmap='gray')
     plt.savefig('recon_matlab_%s.png'%fname)
     plt.close(fig)
-    
-# Move the images to the figures directory
-os.system("cp *.png ../figures")
+
+    data = fid.get('/dataset/python')
+    data = np.array(data)
+    fig = plt.figure(1, figsize=(5,5))    
+    plt.axis('off')
+    plt.imshow(data, cmap='gray')
+    plt.savefig('recon_python_%s.png'%fname)
+    plt.close(fig)
 
