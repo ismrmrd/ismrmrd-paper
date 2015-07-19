@@ -198,7 +198,7 @@ We should describe in more detail:
 \end{itemize}
 
 \subsection*{ISMRMRD Library}
-We have created an implementation of this standard using HDF5 files for storage, along with C, C++, Python and MATLAB, libraries for reading and writing ISMRMRD files.  The project follows an open source development model with a website at http://ismrmrd.github.io and a discussion board and code repository at http://github.com/ismrmrd.  
+We have created an implementation of this standard using HDF5 files for storage, along with C, C++, Python and MATLAB, libraries for reading and writing ISMRMRD files.  The project follows an open source development model with a website at http://ismrmrd.github.io and a discussion board and code repositories at http://github.com/ismrmrd.  
 
 As shown schematically below, the HDF5 container stores the variable length (extensible) XML header, followed by header/data pairs, where each fixed length header (c-struct) encodes readout specific information (k-space location, slice, etc).
 
@@ -252,14 +252,11 @@ An implementation using pure matlab functions (with the Mathworks provided HDF5 
 \end{figure}
 
 \subsection*{Vendor Specific Tools}
-We have developed converters for several vendors proprietary file formats: Bruker, General Electric, Philips, and Siemens.  Because these tools rely on proprietary vendor specific information, they are being distributed through the respective vendor's research network.  Although we are unable to publicly distributed the source code for our Siemens and GE converters, we will describe their architecture in general terms in the hope of providing some guidance or aide to others who are implementing their own conversion tools.  Siemens and GE raw data files differ fundamentally in how they are organized.  Roughly speaking, Siemens raw data files consist of a structured text header followed by k-space data frames stored in acquisition order, where each frame of k-space data is tagged with a small header containing the frame's line number, slice number, location, etc.  GE raw data files on the other hand consist of a binary header followed by frames of k-space data without tags, the layout of the data frames in the file corresponds to the sequence slice/line looping.  
+We have developed converters for several vendors proprietary file formats: Bruker, General Electric, Philips, and Siemens.  The Bruker, Philips and Siemens converters are open source with repositories that can also be found at http://github.com/ismrmrd.  The GE converter relies on proprietary vendor code and are being distributed via the vendor's research network.  Given the variety in vendor raw data file formats, we  describe the architecture of these programs in general terms in the hope of providing some guidance or aid to others who are implementing their own conversion tools.  We refer the reader to the source code for  details.  Roughly speaking, Bruker raw data is stored in a simple directory structure with the acquisition parameters stored in several text files and k-space data stored in a simple binary file as equal length frames of k-space data (without tags).  Siemens raw data files on the other hand have a more complicated structure.  A single file can store raw data from multiple scans.  For each scan, acquisition parameters are stored in a structured text header, followed by k-space data frames stored in acquisition order, where each frame of k-space data is tagged with a small header containing the frame's line number, slice number, location, etc.  Philips and GE raw data files are organized in structures of intermediate complexity.
 
-The Siemens to ISMRMRD converter was written in C++.  The structured text header was converted to XML (containing vendor specific parameter names and parameter values).  This XML file was then processed with a sequence specific XSL style sheet to convert the vendor specific parameters into the vendor independent ISMRMRD XML header.  The frames of k-space data were processed in the order in which they appeared on disk, i.e. acquisition order.  For each frame, the proprietary binary header tag was parsed and used to populate the ISMRMRD AcquisitionHeader structure, and the AcquisitionHeader and data were attached to an Acquisition and written to the HDF5 file.
+The four converters were written in C++.  The acquisition parameters (structured text header or binary data structures) were converted to XML (containing vendor specific parameter names and parameter values).  This XML file was then processed with a sequence specific XSL style sheet to convert the vendor specific parameters into the vendor independent ISMRMRD XML header.  The frames of k-space data were processed in the order in which they appeared on disk.  For vendors with tagged data frames, the proprietary binary header tag was parsed and used to populate the ISMRMRD AcquisitionHeader structure.  For vendors with untagged data frames, sequence and vendor specific knowledge was used.  
 
-Several different GE to ISMRMRD converters were written in C++, Python, and Matlab.  This provided an opportunity to test and verify the various ISMRMRD APIs.  The logical structure of these converters was similar.  First the binary header was read into a data structure, then the XML header was constructed using one of the automatically generated XML header APIs: the XSD generated API for C++, the PyXB generated API for Python, and the JAXB generated API for JAVA which can be called directly from Matlab.  Once the XML header was generated, each frame of the k-space data was read off disk and its location in the file (i.e. it's position in the slice/line looping order) and sequence specific information stored in the binary header were used to populate the corresponding ISMRMRD AcquisitonHeader.
-
-It is worth emphasizing that both the Siemens and GE raw data file format required some work and a good deal of vendor specific knowledge on the part of the developer of the converter program.  However, once code was developed for converting raw data from one pulse sequence on a particular platform, it was quite straightforward to modify this code to handle other sequences.
-
+It is worth emphasizing that these converters required some work and a good deal of vendor specific knowledge on the part of the developers.  However, once code was developed for converting raw data from one pulse sequence on a particular platform, it was quite straightforward to modify this code to handle other sequences and we believe that others can easily modify these converters to handle currently unsupported product sequences or their own research sequences.
 
 \section*{Experimental Demonstration}
 
@@ -276,12 +273,12 @@ In a typical MR image reconstruction research project, one would like to test an
 In the interest of reproducible research, the authors of the publication describing the implementation and validation of this image reconstruction algorithm will distribute the source code for the implementation of the algorithm and the raw data sets that were used to generate the figures for the publication and perhaps additional code or data related to the testing or validation of the algorithm.
 
 % Figure 4
-\begin{figure}
-\label{fig:workflow}
+\begin{figure}[ht]
 \begin{center}
-\includegraphics[width=6in]{workflow.eps}
-\caption{ISMRM Raw Data workflow}
+\includegraphics[width=6in]{recon_demo}
 \end{center}
+\caption{Experimental Demonstration:}
+\label{fig:demo}
 \end{figure}
 
 Our prototypical image research project begins with an outline of the steps of the toy algorithm:
