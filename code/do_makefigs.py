@@ -52,14 +52,16 @@ syn_cpp = 255/(0.9*np.max(syn_cpp)) * syn_cpp[::-1,:]
 syn_mat = 255/(0.9*np.max(syn_mat)) * syn_mat[::-1,:]
 syn_py  = 255/(0.9*np.max(syn_py))  * syn_py[::-1,:]
 
-w, h = 5,3
-dw, dh = 0.5, 0.5
+w, h = 5.,3.
+dw, dh = 0.75, 0.4
+g=.05
 wt = w+dw
 ht = h+dh
 
 fig = plt.figure(1,(wt,ht),dpi=600,frameon=False)
-ax = fig.add_axes([dw/wt,0,1,h/ht],frameon=False)
-ax.axis('off')
+ax = fig.add_axes([dw/wt,0,1.-dw/wt,h/ht])
+ax.set_axis_off()
+
 ax.imshow(np.hstack(
         (np.vstack((bruk_cpp, bruk_mat, bruk_py)),
          np.vstack((ge_cpp,   ge_mat,   ge_py)),
@@ -68,14 +70,15 @@ ax.imshow(np.hstack(
          np.vstack((syn_cpp,  syn_mat,  syn_py)))),
          cmap='gray')
 
-fig.text(0.5*dw/wt,.777*h/ht,'C++',ha='center',va='center',size=12)
-fig.text(0.5*dw/wt,0.5*h/ht,'MATLAB',ha='center',va='center',size=12)
-fig.text(0.5*dw/wt,.133*h/ht,'Python',ha='center',va='center',size=12)
+fig.text(dw/wt-2*g/wt, 1./6.*h/ht,'C++',ha='right',va='center',size=12)
+fig.text(dw/wt-2*g/wt, 3./6.*h/ht,'MATLAB',ha='right',va='center',size=12)
+fig.text(dw/wt-2*g/wt, 5./6.*h/ht,'Python',ha='right',va='center',size=12)
 
-fig.text(dw/wt+0.1*w/wt,(h+dh/2)/ht,'Bruker',ha='center',va='center',size=12)
-fig.text(dw/wt+0.3*w/wt,(h+dh/2)/ht,'GE',ha='center',va='center',size=12)
-fig.text(dw/wt+0.5*w/wt,(h+dh/2)/ht,'Philips',ha='center',va='center',size=12)
-fig.text(dw/wt+0.7*w/wt,(h+dh/2)/ht,'Siemens',ha='center',va='center',size=12)
-fig.text(dw/wt+0.9*w/wt,(h+dh/2)/ht,'Synthetic',ha='center',va='center',size=12)
+fig.text(dw/wt+0.1*w/wt,h/ht+g/ht,'Bruker',ha='center',va='bottom',size=12)
+fig.text(dw/wt+0.3*w/wt,h/ht+g/ht,'GE',ha='center',va='bottom',size=12)
+fig.text(dw/wt+0.5*w/wt,h/ht+g/ht,'Philips',ha='center',va='bottom',size=12)
+fig.text(dw/wt+0.7*w/wt,h/ht+g/ht,'Siemens',ha='center',va='bottom',size=12)
+fig.text(dw/wt+0.9*w/wt,h/ht+g/ht,'Synthetic',ha='center',va='bottom',size=12)
 
-fig.savefig('recon_demo.eps',format='eps',dpi=1200)
+fig.savefig('recon_demo.eps',format='eps',dpi=600)
+
