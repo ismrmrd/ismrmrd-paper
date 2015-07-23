@@ -80,5 +80,5 @@ fig.text(dw/wt+0.5*w/wt,h/ht+g/ht,'Philips',ha='center',va='bottom',size=12)
 fig.text(dw/wt+0.7*w/wt,h/ht+g/ht,'Siemens',ha='center',va='bottom',size=12)
 fig.text(dw/wt+0.9*w/wt,h/ht+g/ht,'Synthetic',ha='center',va='bottom',size=12)
 
-fig.savefig('recon_demo.eps',format='eps',dpi=600)
+fig.savefig('figure4_recon_demo.eps',format='eps',dpi=600)
 

@@ -13,10 +13,10 @@ matlab -r do_recon_matlab
 python do_recon_python.py
 
 # Extract the PNGs
-#python do_makefigs.py
+python do_makefigs.py
 
 # Move the images to the figures directory
-#mv *.png ../figures
+mv *.eps ../figures
 
 # Clean up
-#rm -f *.h5
+rm -f *.h5
