@@ -14,7 +14,7 @@
    height="810"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.2 r9819"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="ismrmrd_format.svg">
   <sodipodi:namedview
      id="base"
@@ -24,8 +24,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1559256"
-     inkscape:cx="392.49543"
-     inkscape:cy="580.94201"
+     inkscape:cx="189.6277"
+     inkscape:cy="650.15062"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -223,35 +223,12 @@
        y="364.93845"
        x="411.79654"
        id="image3106"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUcAAAF8CAYAAABc9HkFAAAABHNCSVQICAgIfAhkiAAABM9JREFU
-eJzt1KERgDAAwMDCsf82DFYODxYRX8T/BFHZ5pzPAODr3FcXAPyROQIEcwQI5ggQzBEgmCNAMEeA
-YI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGC
-OQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjm
-CBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgj
-QDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4A
-wRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIE
-cwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDM
-ESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBH
-gGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwB
-gjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI
-5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCY
-I0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCO
-AMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkC
-BHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQ
-zBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0Aw
-R4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEc
-AYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHME
-COYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEg
-mCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4Bg
-jgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5
-AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYI
-EMwRIJgjQDBHgGCOAMEcAYI5AoRjjHGtjgD4mfsFh6YJZxgHgIoAAAAASUVORK5CYII=
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUcAAAF8CAYAAABc9HkFAAAABHNCSVQICAgIfAhkiAAABM9JREFU eJzt1KERgDAAwMDCsf82DFYODxYRX8T/BFHZ5pzPAODr3FcXAPyROQIEcwQI5ggQzBEgmCNAMEeA YI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGC OQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjm CBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgj QDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4A wRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIE cwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDM ESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBH gGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwB gjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI 5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCY I0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCO AMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkC BHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQ zBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0Aw R4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEc AYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHME COYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEg mCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5AgRzBAjmCBDMESCYI0AwR4Bg jgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYIEMwRIJgjQDBHgGCOAMEcAYI5 AgRzBAjmCBDMESCYI0AwR4BgjgDBHAGCOQIEcwQI5ggQzBEgmCNAMEeAYI4AwRwBgjkCBHMECOYI EMwRIJgjQDBHgGCOAMEcAYI5AoRjjHGtjgD4mfsFh6YJZxgHgIoAAAAASUVORK5CYII= "
        height="401.62769"
        width="354.68344" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="201.57007"
        y="318.75076"
        id="text3109"
@@ -259,7 +236,7 @@ EMwRIJgjQDBHgGCOAMEcAYI5AoRjjHGtjgD4mfsFh6YJZxgHgIoAAAAASUVORK5CYII=
          sodipodi:role="line"
          id="tspan3111"
          x="201.57007"
-         y="318.75076">HDF5 File Container</tspan></text>
+         y="318.75076">ISMRMRD Dataset</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -283,7 +260,7 @@ EMwRIJgjQDBHgGCOAMEcAYI5AoRjjHGtjgD4mfsFh6YJZxgHgIoAAAAASUVORK5CYII=
            x="57.962208"
            y="153.38335"
            style="-inkscape-font-specification:Courier;font-family:Courier;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:8px" /></flowRegion><flowPara
-         id="flowPara3150"></flowPara></flowRoot>    <flowRoot
+         id="flowPara3150" /></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot3156"
        style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Courier;font-style:normal;font-weight:normal;font-size:8px;line-height:125%;letter-spacing:0px;word-spacing:0px;-inkscape-font-specification:Courier;font-stretch:normal;font-variant:normal"><flowRegion
@@ -294,7 +271,7 @@ EMwRIJgjQDBHgGCOAMEcAYI5AoRjjHGtjgD4mfsFh6YJZxgHgIoAAAAASUVORK5CYII=
            x="57.097099"
            y="149.92291"
            style="-inkscape-font-specification:Courier;font-family:Courier;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:8px" /></flowRegion><flowPara
-         id="flowPara3162"></flowPara></flowRoot>    <flowRoot
+         id="flowPara3162" /></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot3175"
        style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Courier;font-style:normal;font-weight:normal;font-size:8px;line-height:125%;letter-spacing:0px;word-spacing:0px;-inkscape-font-specification:Courier;font-stretch:normal;font-variant:normal"><flowRegion
@@ -305,7 +282,7 @@ EMwRIJgjQDBHgGCOAMEcAYI5AoRjjHGtjgD4mfsFh6YJZxgHgIoAAAAASUVORK5CYII=
            x="60.557529"
            y="157.70888"
            style="-inkscape-font-specification:Courier;font-family:Courier;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:8px" /></flowRegion><flowPara
-         id="flowPara3181"></flowPara></flowRoot>    <text
+         id="flowPara3181" /></flowRoot>    <text
        xml:space="preserve"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Courier;-inkscape-font-specification:Courier"
        x="58.827316"
@@ -522,7 +499,7 @@ EMwRIJgjQDBHgGCOAMEcAYI5AoRjjHGtjgD4mfsFh6YJZxgHgIoAAAAASUVORK5CYII=
            height="57.962208"
            x="58.827316"
            y="161.16931" /></flowRegion><flowPara
-         id="flowPara3312"></flowPara></flowRoot>    <text
+         id="flowPara3312" /></flowRoot>    <text
        sodipodi:linespacing="125%"
        id="text3440"
        y="358.54572"

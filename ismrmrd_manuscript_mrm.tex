@@ -184,54 +184,34 @@ This ISMRMRD standard was developed by a subcommittee of the ISMRM Sedona 2013 w
 % ------------------------------------------------------------------------
 \section*{Architecture and Implementation}
 \subsection*{Design}
-The ISMRMRD format combines a mix of flexible data structures (XML header) and fixed structures (equivalent to C-structs).  A minimal raw data set consists of two sections:
+The ISMRMRD format combines a mix of flexible data structures (XML header) and fixed structures (equivalent to C-structs).  A minimal raw data set is depicted in fig.~\ref{fig::format} and consists of two sections:
 \begin{itemize}
 \item{XML header} A flexible XML format document that can contain an arbitrary number of fields and accommodate everything from simple values (b-values, etc.) to entire vendor protocols, etc. This purpose of this XML document is to provide parameters that may be meaningful for some experiments but not for others. This XML format is defined by an XML Schema Definition file (ismrmrd.xsd).
 \item{Raw data} This section contains all the acquired data in the experiment organized as a sequence of data items.  Each data item corresponds to a single frame or chunk in an experiment, for example a single line of data in a cartesian acquisition or a single interleave in a multi-shot spiral acquisition. Each data item consists of a fixed size header (C-struct) with encoding numbers, etc., along with the k-space data for all of the each acquired channel, and (optionally) the k-space trajectory. The raw data headers are defined in a C/C++ header file (ismrmrd.h)
 \end{itemize}
-
 The format supports storing k-space trajectories along with the data and provides a simple image format for storing the product of reconstructions.
+% Figure 1
+\begin{figure}
+\label{fig:format}
+\begin{center}
+\includegraphics[width=6in]{figure1_ismrmrd_format.eps}
+\caption{ISMRMRD Dataset:}
+\end{center}
+\end{figure}
+
+% Figure 2
+\begin{figure}
+\label{fig:cstruct}
+\begin{center}
+\includegraphics[width=6in]{uml_diagram.eps}
+\caption{Data header structure}
+\end{center}
+\end{figure}
 
 We should describe in more detail:
 \begin{itemize}
 \item Encoding spaces
 \end{itemize}
-
-\subsection*{ISMRMRD Library}
-We have created an implementation of this standard using HDF5 files for storage, along with C, C++, Python and MATLAB, libraries for reading and writing ISMRMRD files.  The project follows an open source development model with a website at http://ismrmrd.github.io and a discussion board and code repositories at http://github.com/ismrmrd.  
-
-As shown schematically below, the HDF5 container stores the variable length (extensible) XML header, followed by header/data pairs, where each fixed length header (c-struct) encodes readout specific information (k-space location, slice, etc).
-
-The XML header can be thought of as a text representation of a data structure and there are many ways to:
-\begin{itemize}
-\item generate the text representation from the data structure (serialization), and
-\item parse the text representation and populate the fields of the data structure (deserialization)
-\end{itemize} 
-One could chose to generate an XML header by hand (e.g. with a text editor), although this is useful for prototyping it is generally inconvenient for production.  There are two different strategies for creating the data structure corresponding to the XML structure described by the schema file and the serialization and deserialization functions needed to go between the text and the data structure.  One could either hand craft code, or use XML data binding and process the schema file to auto-generate source code for an object that can be serialized into an XML string or deserialized from an XML string.   The tradeoff between hand crafted and auto-generated code depends a great deal on the available tools.  Generally speaking hand crafting code allows for the creation of a better API for the end user, at the expense of (potentially) a great deal of effort on the part of the library authors, whereas auto-generating code is significantly less effort on the part of the library authors and guarantees the generation of valid XML strings that conform to the schema, but results in often awkward and inconvenient syntax for the end user .  We explored various options for each language: Code Synthesis XSD  for C++, JAXB for JAVA as MATLAB can use JAVA objects directly, and PyXB for Python.  As of this writing, we have chosen to hand craft the code for C++ and JAVA and to auto-generate the code for Python.
-
-\subsubsection{C implementation}
-Depends on HDF5.
-
-\subsubsection{C++ implementation}
-Wrapper around the C library and hand crafted XML header binding class.
-
-\subsubsection{Python implementation}
-The PyXB generated XML header binding class.  H5Py for interacting with the files.  Numpy arrays for the data and the k-space trajectories.
-
-\subsubsection{Matlab implementation}
-Hand crafted JAVA code for the XML header binding class.
-Matlab ships with a version of the HDF5 library.
-An implementation using pure matlab functions (with the Mathworks provided HDF5 interface).
-
-
-% Figure 1
-\begin{figure}
-\label{fig:format}
-\begin{center}
-\includegraphics[width=6in]{ismrmrd_format.eps}
-\caption{HDF5 File Format}
-\end{center}
-\end{figure}
 
 % Figure 2
 \begin{figure}
@@ -242,14 +222,51 @@ An implementation using pure matlab functions (with the Mathworks provided HDF5 
 \end{center}
 \end{figure}
 
-% Figure 3
-\begin{figure}
-\label{fig:cstruct}
-\begin{center}
-\includegraphics[width=6in]{uml_diagram.eps}
-\caption{Data header structure}
-\end{center}
-\end{figure}
+
+\subsection*{ISMRMRD Library}
+We have created an implementation of this standard using HDF5 files for storage, along with C/C++, Python and MATLAB, libraries for reading and writing ISMRMRD files.  The project follows an open source development model with a website at http://ismrmrd.github.io and a discussion board and code repositories at http://github.com/ismrmrd.  
+
+As shown schematically below, the HDF5 container stores the variable length (extensible) XML header, followed by header/data pairs, where each fixed length header (c-struct) encodes readout specific information (k-space location, slice, etc).
+
+The XML header can be thought of as a text representation of a data structure and there are many ways to:
+\begin{itemize}
+\item generate the text representation from the data structure (serialization), and
+\item parse the text representation and populate the fields of the data structure (deserialization)
+\end{itemize} 
+One could chose to generate an XML header by hand (e.g. with a text editor), although this is useful for prototyping it is generally inconvenient for production.  There are two different strategies for creating the data structure corresponding to the XML structure described by the schema file and the serialization and deserialization functions needed to go between the text and the data structure.  One could either hand craft code, or use XML data binding and process the schema file to auto-generate source code for an object that can be serialized into an XML string or deserialized from an XML string.   The tradeoff between hand crafted and auto-generated code depends a great deal on the available tools.  Generally speaking hand crafting code allows for the creation of a better API for the end user, at the expense of (potentially) a great deal of effort on the part of the library authors, whereas auto-generating code is significantly less effort on the part of the library authors and guarantees the generation of valid XML strings that conform to the schema, but results in often awkward and inconvenient syntax for the end user .  We explored various options for each language: Code Synthesis XSD  for C++, JAXB for JAVA as MATLAB can use JAVA objects directly, and PyXB for Python.  As of this writing, we have chosen to hand craft the code for C++ and JAVA and to auto-generate the code for Python.
+
+\subsubsection{HDF5 file container}
+@ONLINE{hdf5,
+    author = {{The HDF Group}},
+    title = "{Hierarchical Data Format, version 5}",
+    year = {1997-NNNN},
+    note = {http://www.hdfgroup.org/HDF5/}
+}
+
+
+\subsubsection{C/C++ implementation}
+Depends on HDF5.  Wrapper around the C library and hand crafted XML header binding class.
+
+\subsubsection{Python implementation}
+The PyXB generated XML header binding class.  H5Py for interacting with the files.  Numpy arrays for the data and the k-space trajectories.
+
+Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. The NumPy Array: A Structure for Efficient Numerical Computation, Computing in Science & Engineering, 13, 22-30 (2011), DOI:10.1109/MCSE.2011.37 (publisher link)
+
+@Misc{,
+  author =    {Eric Jones and Travis Oliphant and Pearu Peterson and others},
+  title =     {{SciPy}: Open source scientific tools for {Python}},
+  year =      {2001--},
+  url = "http://www.scipy.org/",
+  note = {[Online; accessed 2015-07-21]}
+}
+
+http://pyxb.sourceforge.net
+
+\subsubsection{Matlab implementation}
+Hand crafted JAVA code for the XML header binding class.
+Matlab ships with a version of the HDF5 library.
+An implementation using pure matlab functions (with the Mathworks provided HDF5 interface).
+
 
 \subsection*{Vendor Specific Tools}
 We have developed converters for several vendors proprietary file formats: Bruker, General Electric, Philips, and Siemens.  The Bruker, Philips and Siemens converters are open source with repositories that can also be found at http://github.com/ismrmrd.  The GE converter relies on proprietary vendor code and are being distributed via the vendor's research network.  Given the variety in vendor raw data file formats, we  describe the architecture of these programs in general terms in the hope of providing some guidance or aid to others who are implementing their own conversion tools.  We refer the reader to the source code for  details.  Roughly speaking, Bruker raw data is stored in a simple directory structure with the acquisition parameters stored in several text files and k-space data stored in a simple binary file as equal length frames of k-space data (without tags).  Siemens raw data files on the other hand have a more complicated structure.  A single file can store raw data from multiple scans.  For each scan, acquisition parameters are stored in a structured text header, followed by k-space data frames stored in acquisition order, where each frame of k-space data is tagged with a small header containing the frame's line number, slice number, location, etc.  Philips and GE raw data files are organized in structures of intermediate complexity.
