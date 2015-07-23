@@ -236,31 +236,15 @@ The XML header can be thought of as a text representation of a data structure an
 One could chose to generate an XML header by hand (e.g. with a text editor), although this is useful for prototyping it is generally inconvenient for production.  There are two different strategies for creating the data structure corresponding to the XML structure described by the schema file and the serialization and deserialization functions needed to go between the text and the data structure.  One could either hand craft code, or use XML data binding and process the schema file to auto-generate source code for an object that can be serialized into an XML string or deserialized from an XML string.   The tradeoff between hand crafted and auto-generated code depends a great deal on the available tools.  Generally speaking hand crafting code allows for the creation of a better API for the end user, at the expense of (potentially) a great deal of effort on the part of the library authors, whereas auto-generating code is significantly less effort on the part of the library authors and guarantees the generation of valid XML strings that conform to the schema, but results in often awkward and inconvenient syntax for the end user .  We explored various options for each language: Code Synthesis XSD  for C++, JAXB for JAVA as MATLAB can use JAVA objects directly, and PyXB for Python.  As of this writing, we have chosen to hand craft the code for C++ and JAVA and to auto-generate the code for Python.
 
 \subsubsection{HDF5 file container}
-@ONLINE{hdf5,
-    author = {{The HDF Group}},
-    title = "{Hierarchical Data Format, version 5}",
-    year = {1997-NNNN},
-    note = {http://www.hdfgroup.org/HDF5/}
-}
-
+%\cite{hdf5}
 
 \subsubsection{C/C++ implementation}
 Depends on HDF5.  Wrapper around the C library and hand crafted XML header binding class.
 
 \subsubsection{Python implementation}
 The PyXB generated XML header binding class.  H5Py for interacting with the files.  Numpy arrays for the data and the k-space trajectories.
+%\cite{pyxb}
 
-Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. The NumPy Array: A Structure for Efficient Numerical Computation, Computing in Science & Engineering, 13, 22-30 (2011), DOI:10.1109/MCSE.2011.37 (publisher link)
-
-@Misc{,
-  author =    {Eric Jones and Travis Oliphant and Pearu Peterson and others},
-  title =     {{SciPy}: Open source scientific tools for {Python}},
-  year =      {2001--},
-  url = "http://www.scipy.org/",
-  note = {[Online; accessed 2015-07-21]}
-}
-
-http://pyxb.sourceforge.net
 
 \subsubsection{Matlab implementation}
 Hand crafted JAVA code for the XML header binding class.
@@ -276,8 +260,9 @@ The four converters were written in C++.  The acquisition parameters (structured
 It is worth emphasizing that these converters required some work and a good deal of vendor specific knowledge on the part of the developers.  However, once code was developed for converting raw data from one pulse sequence on a particular platform, it was quite straightforward to modify this code to handle other sequences and we believe that others can easily modify these converters to handle currently unsupported product sequences or their own research sequences.
 
 \section*{Experimental Demonstration}
+In a typical MR image reconstruction research project, one often tests and validates an algorithm or a particular implementation of an algorithm on simulated data and on data acquired from a phantom or from an in-vivo experiment.  In the interest of reproducible research, the scientists would distribute the source code and the raw data sets that were used to generate the figures for the publication and perhaps additional code or data related to the testing or validation of the algorithm.
 
-In a typical MR image reconstruction research project, one would like to test and/or validate an algorithm and an implementation on simulated data and on data acquired from a phantom or from an in-vivo experiment.  Here we demonstrate how one could use the ISMRMRD format and APIs in a prototypical image reconstruction research project: the development, implementation and testing of a trivial image reconstruction algorithm suitable for 2D experiments in which the k-space data are acquired on a fully sampled cartesian grid.  The workflow for this toy research project is depicted in fig.~\ref{fig::workflow}.  It is a subset of a more complete full development cycle:
+Here we demonstrate how one could use the ISMRMRD format and APIs in such a project: the development, implementation and testing of a trivial image reconstruction algorithm suitable for 2D experiments in which the k-space data are acquired using a multi-channel receiver array and fully sampled on a cartesian grid.  The workflow for this demonstration project is a subset of a more complete full development cycle:
 \begin{enumerate}
 \item An initial implementation or proof of concept of the algorithm is implemented in a rapid prototyping language such as Matlab or Python.
 \item Synthetic data are generated in simulation and used to test/validate the prototype implementation.
@@ -287,10 +272,8 @@ In a typical MR image reconstruction research project, one would like to test an
 \item The high performance implementation of the algorithm is put into production in a clinical environment.
 \end{enumerate}
 
-In the interest of reproducible research, the authors of the publication describing the implementation and validation of this image reconstruction algorithm will distribute the source code for the implementation of the algorithm and the raw data sets that were used to generate the figures for the publication and perhaps additional code or data related to the testing or validation of the algorithm.
-
 % Figure 4
-\begin{figure}[ht]
+\begin{figure}
 \begin{center}
 \includegraphics[width=6in]{figure4_recon_demo.eps}
 \end{center}
@@ -298,19 +281,43 @@ In the interest of reproducible research, the authors of the publication describ
 \label{fig:demo}
 \end{figure}
 
-Our prototypical image research project begins with an outline of the steps of the toy algorithm:
+Our prototypical image research project began with an outline of the steps of the simple 2D image reconstruction algorithm algorithm:
 \begin{enumerate}
-\item data are read and stored in a buffer (Nkx,Nky,Nz)
-\item the fourier transform is computed on the first two dimensions (x,y)
-\item chop if the data were acquired on an oversampled grid in the frequency encode direction
+\item data are read and stored in a buffer (Nkx,Nky,Ncoil)
+\item the fourier transform is computed on two dimensions (x,y)
+\item the images are chopped if the data were acquired on an oversampled grid in the frequency encode direction
 \end{enumerate}
-The prototype implementation of this algorithm was written in Python and Matlab.  The high performance implementation of the algorithm was written in C++.  All three implementations used the ISMRMRD API to read in an ISMRMRD format file.
+The prototype implementation of this algorithm was written in Python (\texttt{do\_recon\_python.py}) and Matlab (\texttt{do\_recon\_matlab.m}).  The high performance implementation of the algorithm was written in C++ (\texttt{ismrmrd\_recon\_cartesian\_2d}).  All three implementations used the corresponding ISMRMRD APIs to read in an ISMRMRD format file and to save the reconstructed image.
 
-Synthetic data sets were generated from a simple MR physics simulation of a GRE experiment collecting data from a single slice object (a Shepp-Logan phantom) using an 8-element birdcage coil.  Different instances of randomly generated white gaussian noise were added to the k-space data to simulate several repetitions of the experiment in the presence of noise.  The resulting simulated data sets were written to disk in ISMRMRD formats.  The simulation programs were implemented in C++, Python, and Matlab. 
+A synthetic data set in ISMRMRD format was generated using a program written in C++ (\texttt{ismrmrd\_generate\_cartesian\_shepp\_logan}).  This program simulated a simple experiment collecting data from a single slice object using an 8-element receive array in the presence of a small amount of noise.  The k-space data was generated by multiplying the Shepp-Logan phantom with the receive profile of an 8-rung birdcage coil followed by Fourier transformation and the addition of randomly generated white gaussian noise.
 
-Two real data sets were collected from a water phantom on two different 3T scanners: 1) a Siemens Skyra, and 2) a GE MR750.  Data were acquired using each vendor's product 2D gradient echo pulse sequence and 32 channel head coil.  The acquisition parameters were matched as closely as possible FOV=256~mm, slice thickness=5~mm, Nx=128, Ny=128, Nz=30, TR=250~ms, TE=min.  The raw data files were transferred off-line and converted into ISMRMRD using the vendor specific converters described above.
+Data sets were collected from a phantom (kiwi fruit) scanners from four different vendors: 
+\begin{itemize}
+\item Bruker 4.7T (TODO model?) with a single channel 10cm transmit/receive coil
+\item GE 3T MR750 with a 32-channel head coil
+\item Philips 3T (TODO Model?) with a 6-channel knee coil
+\item Siemens 3T Skyra with a 32-channel head coil
+\end{itemize}
+Data were acquired using product 2D pulse sequences.  The FOV=10~cm, slice thickness=2~mm, and matrix size (Nx=Ny=512) were matched although no attempt was made to match the pulse sequence type or timings.  The raw data files were transferred off-line and converted into ISMRMRD using the vendor specific converters described above.	
 
-The ISMRMRD source code distribution (Sourceforge URL, hash) contains code for the image reconstruction programs and the raw data simulation programs.  It also contains the LaTeX source for this manuscript.  The source code for the raw data converters is being distributed through each vendor's research collaboration network.  The converted raw data in the vendor neutral ISMRMD format are being distributed via XNAT (URL).  
+\section*{Source Code Dissemination}
+The source code for this project is being distributed as follows:
+\begin{itemize}
+\item Manuscript LaTeX, figures and Matlab and Python reconstruction: 
+	https://github.com/ismrmrd/ismrmrd-paper 
+	hash=TBD
+\item C++ API and C++ synthetic data generation and C++ reconstruction
+	https://github.com/ismrmrd/ismrmrd
+    	hash=e7ecb1bbc93c62aceaeb8d197016d67b44e07fee
+\item Python API: \url{https://github.com/ismrmrd/ismrmrd-python} 
+	hash=4e2d8be17ad14fc9ff8d5801751a4511ce435b39
+\item Bruker converter: \url{https://github.com/ismrmrd/bruker_to_ismrmrd} (hash=46dbb5720e9f4304af0920cd6dfa5f7370c75d89)
+\item GE converter: \url{https://github.com/nih-fmrif/ge-tools} (hash=f63f74e61e2f8bc920164aa5c8e6ef4dd22705b0) (private)
+\item Siemens converter: \url{https://github.com/ismrmrd/philips_to_ismrmrd} (hash=b5256ed8267446e70059a5eea88ae6de59c12fe7)
+\item Philips converter: \url{http://github.com/ismrmrd/siemens_to_ismrmrd} (hash=5a06e1c5eb3589f650d3c915675a3cab4da0c9e0)
+\end{itemize}
+
+The raw data in vendor proprietary formats and in ISMRMRD format are being distributed via XNAT (TODO upload data URL).  
 
 % ------------------------------------------------------------------------
 %	Discussion
