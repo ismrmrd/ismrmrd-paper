@@ -85,7 +85,7 @@ Sebastian Kozerke$^6$,
 Hui Xue$^5$,
 Thomas S. Sorensen$^3$,
 James G. Pipe$^2$,
-Michael S. Hansen$^5xs$
+Michael S. Hansen$^5$
 \end{center}
 
 \begin{enumerate}
@@ -187,15 +187,16 @@ This ISMRMRD standard was developed by a subcommittee of the ISMRM Sedona 2013 w
 The ISMRMRD format combines a mix of flexible data structures (XML header) and fixed structures (equivalent to C-structs).  A minimal raw data set is depicted in fig.~\ref{fig::format} and consists of two sections:
 \begin{itemize}
 \item{XML header} A flexible XML format document that can contain an arbitrary number of fields and accommodate everything from simple values (b-values, etc.) to entire vendor protocols, etc. This purpose of this XML document is to provide parameters that may be meaningful for some experiments but not for others. This XML format is defined by an XML Schema Definition file (ismrmrd.xsd).
-\item{Raw data} This section contains all the acquired data in the experiment organized as a sequence of data items.  Each data item corresponds to a single frame or chunk in an experiment, for example a single line of data in a cartesian acquisition or a single interleave in a multi-shot spiral acquisition. Each data item consists of a fixed size header (C-struct) with encoding numbers, etc., along with the k-space data for all of the each acquired channel, and (optionally) the k-space trajectory. The raw data headers are defined in a C/C++ header file (ismrmrd.h)
+\item{Raw data} This section contains all the acquired data in the experiment organized as a sequence of data items.  Each data item corresponds to a single frame or chunk in an experiment, for example a single line of data in a cartesian acquisition or a single interleave in a multi-shot spiral acquisition. Each data item consists of a fixed size header (C-struct) with encoding numbers, etc., along with the k-space data for all of the each acquired channel, and (optionally) the k-space trajectory as depicted in fig.~\ref{fig:cstruct}. The raw data structures are defined in a C/C++ header file (ismrmrd.h).
 \end{itemize}
-The format supports storing k-space trajectories along with the data and provides a simple image format for storing the product of reconstructions.
+The format also provides a simple image format for storing the product of reconstructions and a multi-dimensional array format for storing additional user-specified parameters (e.g. gradient non-linearity correction maps, etc.).
+
 % Figure 1
 \begin{figure}
 \label{fig:format}
 \begin{center}
 \includegraphics[width=6in]{figure1_ismrmrd_format.eps}
-\caption{ISMRMRD Dataset:}
+\caption{Minimal ISMRMRD dataset consists of a flexible XML header and raw data organized as sequence of data items consisting of a fixed data header and the k-space data samples}
 \end{center}
 \end{figure}
 
@@ -204,56 +205,51 @@ The format supports storing k-space trajectories along with the data and provide
 \label{fig:cstruct}
 \begin{center}
 \includegraphics[width=6in]{figure2_uml_diagram.eps}
-\caption{Data header structure}
+\caption{Raw data structure for each frame or chunk of the acquisition, consisting of a fixed size header with encoding numbers, location, etc. and the raw k-space data and (optionally) the k-space sampling locations.}
 \end{center}
 \end{figure}
 
-We should describe in more detail:
+One of the ISMRMRD file format's key design features is the notion of an "Encoding" which serves as a description of the type and limits of the experiment and provides the reconstruction program with guidance as to the physical size and resolution of the imaging volume and the ranges of the data header labels.  An ISMRMRD dataset may contain data from several encodings.  Each encoding is described in the XML header and each acquisition (data chunk) is tagged with a label for the encoding from which it was acquired. All encoding spaces have a trajectory type, an "encodedSpace", a "reconSpace", "encodingLimits", and an optional trajectory description which can contain an arbitrary set of named parameters like the gradient ramp and flat top times for EPI, or the parameters controlling the shape of the spiral trajectory, etc.  An example of an encoding describing a simple 2D cartesian acquisition is shown in fig.~\ref{fig:encoding}.  In this particular case, the encoding has the following description:
 \begin{itemize}
-\item Encoding spaces
+\item the "encodedSpace" section gives the matrix size ($32\times16\times1$) and field of view in mm ($600\times300\times10$) of the imaging volume encoded by the excitation, i.e. a 10~mm thick slice, 600~mm in x and 300~mm in y, encoded with a nominal matrix size of 600 in x and 300 in y, i.e. at a nominal resolution of 18.75mm.
+\item The "reconSpace" section indicates that the image should be reconstructed on a smaller field of view ($300\times300\times10$), but with half the number of pixels in x.
+\item The combination of the "encodedSpace" and "reconSpace" indicate that the k-space data were acquired on a grid oversampled by a factor of 2 in the x direction.
+\item The "encodingLimits" section indicates the ky center (5) and the minimum and maximum ky values (0 and 11 respectively), i.e. this is a partial fourier experiment, with a true resolution that is somewhat larger than the nominal resolution, $min(ky)=-5$, $max(ky)=+6$.
 \end{itemize}
-
 % Figure 2
 \begin{figure}
 \label{fig:encoding}
 \begin{center}
 \includegraphics[width=6in]{figure3_encoding_spaces.eps}
-\caption{Encoding spaces:}
+\caption{Encoding for a simple 2D cartesian acquisition.  The XML header describes the image encoding and reconstruction fields of view and matrix sizes and k-space sampling bounding box.  The image is acquired at a matrix size of 32 $\times$ 16 $\times$ 1 and field of view of 600mm $times$ 300mm with a slice thickness of 10mm.  It should be reconstructed at a matrix size of 16 $\times$ 16 $\times$ 1 and field of view of 300mm $times$ 300mm with a slice thickness of 10mm.   The k-space data were acquired on a grid oversampled by a factor of 2 in the x direction.  The "encodingLimits" section indicates the ky center (5) and the minimum and maximum ky values (0 and 11 respectively), i.e. this is a partial fourier experiment, with a true resolution that is somewhat larger than the nominal resolution, $min(ky)=-5$, $max(ky)=+6$.}
 \end{center}
 \end{figure}
 
 
 \subsection*{ISMRMRD Library}
-We have created an implementation of this standard using HDF5 files for storage, along with C/C++, Python and MATLAB, libraries for reading and writing ISMRMRD files.  The project follows an open source development model with a website at http://ismrmrd.github.io and a discussion board and code repositories at http://github.com/ismrmrd.  
+We have created a cross-platform implementation of this standard using Hierarchical Data Format (HDF) (\url{http://www.hdfgroup.org/HDF5}) files for storage, along with C/C++, Python and MATLAB (Mathworks), libraries for reading and writing ISMRMRD files.  The project follows an open source development model with a website at (\url{http://ismrmrd.github.io}) and a discussion board and code repositories at \url{http://github.com/ismrmrd}.  The library and associated tools can be compiled in a straightforward way on Linux, Windows, and Macintosh computers.  In this section we a provide a high-level description of the implementation and discuss some of the choices we have made during the development process.  The reader is encouraged to examine and experiment with the source code for more a detailed view.
 
-As shown schematically below, the HDF5 container stores the variable length (extensible) XML header, followed by header/data pairs, where each fixed length header (c-struct) encodes readout specific information (k-space location, slice, etc).
+\subsubsection{Binary file container}
+We chose to use HDF as the binary file container.  HDF is very flexible and has been adopted broadly in the scientific community.  Reading and writing from HDF is supported by nearly every programming language and computational environment, in particular it has a core C and C++ API, is supported natively in MATLAB (it forms the basis for MATLAB's own ".mat" file format), and is supported in Python via the H5Py package (\url{http://www.h5py.org}).
 
-The XML header can be thought of as a text representation of a data structure and there are many ways to:
+\subsubsection{Serialization/Deserialization of the XML header}
+The XML header can be thought of as a text representation of a flexible binary data structure and although it can be created simply with a text editor (often useful for prototyping), it is usually preferable for the software developer to be able to use the data structure directly and to avoid dealing with the text representation representation directly.  Functions to convert between the binary data structure and the text representation reduce error significantly.  The process of generating the text representation from the data structure is usually referred to as "serialization", and the process of parsing the text representation to populate the fields of the data structure is referred to as "deserialization".  There are two different strategies for creating the data structure corresponding to the XML structure described by the schema file and to generate the serialization and deserialization functions needed to go between the text and the data structure, one could either: 1) hand craft code, or 2) auto-generate code.  Generally speaking hand crafting code allows for the creation of a better API for the end user, at the expense of (potentially) a great deal of effort on the part of the library authors, whereas auto-generating code is significantly less effort on the part of the library authors, but results in often awkward and inconvenient syntax for the end user. 
+
+\subsubsection{Three implementations}
+A few notes regarding the C/C++, MATLAB, and Python APIs that were created:
 \begin{itemize}
-\item generate the text representation from the data structure (serialization), and
-\item parse the text representation and populate the fields of the data structure (deserialization)
-\end{itemize} 
-One could chose to generate an XML header by hand (e.g. with a text editor), although this is useful for prototyping it is generally inconvenient for production.  There are two different strategies for creating the data structure corresponding to the XML structure described by the schema file and the serialization and deserialization functions needed to go between the text and the data structure.  One could either hand craft code, or use XML data binding and process the schema file to auto-generate source code for an object that can be serialized into an XML string or deserialized from an XML string.   The tradeoff between hand crafted and auto-generated code depends a great deal on the available tools.  Generally speaking hand crafting code allows for the creation of a better API for the end user, at the expense of (potentially) a great deal of effort on the part of the library authors, whereas auto-generating code is significantly less effort on the part of the library authors and guarantees the generation of valid XML strings that conform to the schema, but results in often awkward and inconvenient syntax for the end user .  We explored various options for each language: Code Synthesis XSD  for C++, JAXB for JAVA as MATLAB can use JAVA objects directly, and PyXB for Python.  As of this writing, we have chosen to hand craft the code for C++ and JAVA and to auto-generate the code for Python.
+\item[XSD Schema] the file ismrmrd.xsd defines the schema for the XML header.
+\item[C library]  This code defines fixed data structures (ismrmrd.h) and the functions used to interact with the HDF5 file.
+\item[C++ library] This code is a wrapper around the C library with convenience classes and functions that provide memory management and reduce programming error.  It includes a hand crafted XML header binding class.  
+\item[Build system] The C and C++ implementation use the CMake (Kitware) build configuration system in order to support multiple operating systems (Linux, Microsoft Windows, Apple OSX).
+\item[MATLAB library] This code consists of pure MATLAB data structures and functions (classes) which call the MATLAB interface to HDF5 as well as hand crafted Java code for the XML header binding class using the Java provided by MATLAB.
+\item[Python library] This code consists of pure Python classes for the data structures, uses NumPy arrays for the data and the k-space trajectories (\url{http://www.numpy.org}, and an auto-generated XML header binding class.
+\end{itemize}
 
-\subsubsection{HDF5 file container}
-%\cite{hdf5}
-
-\subsubsection{C/C++ implementation}
-Depends on HDF5.  Wrapper around the C library and hand crafted XML header binding class.
-
-\subsubsection{Python implementation}
-The PyXB generated XML header binding class.  H5Py for interacting with the files.  Numpy arrays for the data and the k-space trajectories.
-%\cite{pyxb}
-
-
-\subsubsection{Matlab implementation}
-Hand crafted JAVA code for the XML header binding class.
-Matlab ships with a version of the HDF5 library.
-An implementation using pure matlab functions (with the Mathworks provided HDF5 interface).
-
+The code repositories also contain the source code for the documentation, Doxygen (\url{http://www.doxygen.org}) and Sphinx (\url{http://sphinx-doc.org}), as well as examples of how to use the APIs to read and write ISMRMRD files.
 
 \subsection*{Vendor Specific Tools}
-We have developed converters for several vendors proprietary file formats: Bruker, General Electric, Philips, and Siemens.  The Bruker, Philips and Siemens converters are open source with repositories that can also be found at http://github.com/ismrmrd.  The GE converter relies on proprietary vendor code and are being distributed via the vendor's research network.  Given the variety in vendor raw data file formats, we  describe the architecture of these programs in general terms in the hope of providing some guidance or aid to others who are implementing their own conversion tools.  We refer the reader to the source code for  details.  Roughly speaking, Bruker raw data is stored in a simple directory structure with the acquisition parameters stored in several text files and k-space data stored in a simple binary file as equal length frames of k-space data (without tags).  Siemens raw data files on the other hand have a more complicated structure.  A single file can store raw data from multiple scans.  For each scan, acquisition parameters are stored in a structured text header, followed by k-space data frames stored in acquisition order, where each frame of k-space data is tagged with a small header containing the frame's line number, slice number, location, etc.  Philips and GE raw data files are organized in structures of intermediate complexity.
+We have developed converters for several vendors proprietary file formats: Bruker, General Electric, Philips, and Siemens.  The Bruker, Philips and Siemens converters are open source with repositories that can also be found at \url{http://github.com/ismrmrd}.  The GE converter relies on proprietary vendor code and are being distributed via the vendor's research network.  Given the variety in vendor raw data file formats, we  describe the architecture of these programs in general terms in the hope of providing some guidance or aid to others who are implementing their own conversion tools.  We refer the reader to the source code for  details.  Roughly speaking, Bruker raw data is stored in a simple directory structure with the acquisition parameters stored in several text files and k-space data stored in a simple binary file as equal length frames of k-space data (without tags).  Siemens raw data files on the other hand have a more complicated structure.  A single file can store raw data from multiple scans.  For each scan, acquisition parameters are stored in a structured text header, followed by k-space data frames stored in acquisition order, where each frame of k-space data is tagged with a small header containing the frame's line number, slice number, location, etc.  Philips and GE raw data files are organized in structures of intermediate complexity.
 
 The four converters were written in C++.  The acquisition parameters (structured text header or binary data structures) were converted to XML (containing vendor specific parameter names and parameter values).  This XML file was then processed with a sequence specific XSL style sheet to convert the vendor specific parameters into the vendor independent ISMRMRD XML header.  The frames of k-space data were processed in the order in which they appeared on disk.  For vendors with tagged data frames, the proprietary binary header tag was parsed and used to populate the ISMRMRD AcquisitionHeader structure.  For vendors with untagged data frames, sequence and vendor specific knowledge was used.  
 
@@ -300,30 +296,38 @@ Data sets were collected from a phantom (kiwi fruit) scanners from four differen
 \end{itemize}
 Data were acquired using product 2D pulse sequences.  The FOV=10~cm, slice thickness=2~mm, and matrix size (Nx=Ny=512) were matched although no attempt was made to match the pulse sequence type or timings.  The raw data files were transferred off-line and converted into ISMRMRD using the vendor specific converters described above.	
 
-\section*{Source Code Dissemination}
-The source code for this project is being distributed as follows:
+\subsection*{Source Code and Raw Data Dissemination}
+The source code for this project is being distributed in several git repositories hosted on GitHub at the URLs listed bellow.  The SHA1 hashes indicate the particular revision of each of the repositories used for the production of this manuscript:
 \begin{itemize}
-\item Manuscript LaTeX, figures and Matlab and Python reconstruction: 
-	https://github.com/ismrmrd/ismrmrd-paper 
+\item Manuscript LaTeX, figures and Matlab and Python reconstruction: \\
+	\url{https://github.com/ismrmrd/ismrmrd-paper} \\
 	hash=TBD
-\item C++ API and C++ synthetic data generation and C++ reconstruction
-	https://github.com/ismrmrd/ismrmrd
+\item C++ API and C++ synthetic data generation and C++ reconstruction: \\
+	\url{https://github.com/ismrmrd/ismrmrd} \\
     	hash=e7ecb1bbc93c62aceaeb8d197016d67b44e07fee
-\item Python API: \url{https://github.com/ismrmrd/ismrmrd-python} 
+\item Python API: \\
+	\url{https://github.com/ismrmrd/ismrmrd-python} \\
 	hash=4e2d8be17ad14fc9ff8d5801751a4511ce435b39
-\item Bruker converter: \url{https://github.com/ismrmrd/bruker_to_ismrmrd} (hash=46dbb5720e9f4304af0920cd6dfa5f7370c75d89)
-\item GE converter: \url{https://github.com/nih-fmrif/ge-tools} (hash=f63f74e61e2f8bc920164aa5c8e6ef4dd22705b0) (private)
-\item Siemens converter: \url{https://github.com/ismrmrd/philips_to_ismrmrd} (hash=b5256ed8267446e70059a5eea88ae6de59c12fe7)
-\item Philips converter: \url{http://github.com/ismrmrd/siemens_to_ismrmrd} (hash=5a06e1c5eb3589f650d3c915675a3cab4da0c9e0)
+\item Bruker converter: \\
+	\url{https://github.com/ismrmrd/bruker_to_ismrmrd}\\
+	hash=46dbb5720e9f4304af0920cd6dfa5f7370c75d89
+\item GE converter (currently private):\\
+	 \url{https://github.com/nih-fmrif/ge-tools} \\
+	 hash=f63f74e61e2f8bc920164aa5c8e6ef4dd22705b0
+\item Philips converter:\\
+	 \url{http://github.com/ismrmrd/siemens_to_ismrmrd}\\
+	 hash=5a06e1c5eb3589f650d3c915675a3cab4da0c9e0
+\item Siemens converter: \\
+	\url{https://github.com/ismrmrd/philips_to_ismrmrd}\\
+	hash=b5256ed8267446e70059a5eea88ae6de59c12fe7
 \end{itemize}
-
-The raw data in vendor proprietary formats and in ISMRMRD format are being distributed via XNAT (TODO upload data URL).  
+The raw data in vendor proprietary formats and in ISMRMRD format are being distributed via XNAT (http://central.xnat.org) under the project "ISMRMRD Paper" with ID "ISMRMRD".  Readers are encouraged to download the data and source code.
 
 % ------------------------------------------------------------------------
 %	Discussion
 % ------------------------------------------------------------------------
 \section*{Discussion and Conclusion}
-We have presented an initial attempt at creating a standard for storing raw MR data and have demonstrated an implementation that supports several common programming languages.  We believe that as this standard is refined and evolves it will serve as a foundation upon which practitioners can base reproducible research project and collaborations.  A great deal of work remains and we ask for input from the ISMRM community to help shape the direction of the format.
+We have presented an initial attempt at creating a standard for storing raw MR data and have demonstrated an implementation that supports several common programming languages and operating systems.  We believe that as this standard is refined and evolves it will serve as a foundation upon which practitioners can base reproducible research project and collaborations.  A great deal of work remains and we ask for input from the ISMRM community to help shape the direction of the format.
 
 % ------------------------------------------------------------------------
 %	Acknowledgments
