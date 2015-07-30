@@ -272,13 +272,14 @@ It is worth emphasizing that these converters required some work and a good deal
 
 \section*{Experimental Demonstration}
 In a typical MR image reconstruction research project, one often tests and validates an algorithm or a particular implementation of an algorithm on simulated data and on data acquired from a phantom or from an in-vivo experiment.  In the interest of reproducible research, a scientist could then distribute the source code and the raw data sets that were used to generate the figures for the publication and perhaps additional code or data related to the testing or validation of the algorithm.
+This section demonstrates how one could use the ISMRMRD format and APIs for the development, implementation and testing of an image reconstruction algorithm suitable for 2D experiments.
 
-Here we demonstrate how one could use the ISMRMRD format and APIs in such a project: the development, implementation and testing of a trivial image reconstruction algorithm suitable for 2D experiments in which the k-space data are acquired using a multi-channel receiver array and fully sampled on a cartesian grid.  The workflow for this demonstration project is a subset of a more complete full development cycle:
+In this example, the k-space data are acquired using a multi-channel receiver array and the data are fully sampled on a cartesian grid.  The workflow for this demonstration project is a subset of a full development cycle:
 \begin{enumerate}
 \item An initial implementation or proof of concept of the algorithm is implemented in a rapid prototyping language such as Matlab or Python.
 \item Synthetic data are generated in simulation and used to test/validate the prototype implementation.
 \item Real (experimental) data are collected and used to test/validate the prototype implementation.
-\item A high performance/production version of the algorithm is implemented in a compiled language such as C/C++ or Fortran.  In some cases the high performance implementation may require specialized hardware such a compute cluster or a graphical processing unit (GPU).
+\item A high performance production version of the algorithm is implemented in a compiled language such as C/C++ or Fortran.  In some cases the high performance implementation may require specialized hardware such a compute cluster or a graphical processing unit (GPU).
 \item The synthetic and real data sets are used to test/validate the high performance implementation of the algorithm.
 \item The high performance implementation of the algorithm is put into production in a clinical environment.
 \end{enumerate}
@@ -288,11 +289,11 @@ Here we demonstrate how one could use the ISMRMRD format and APIs in such a proj
 \begin{center}
 \includegraphics[width=6in]{figure4_recon_demo.eps}
 \end{center}
-\caption{Experimental demonstration:  Data sets were acquired on scanners from four vendors and converted from the vendor proprietary raw data file formats into ISMRMRD format.  A fifth data set was synthesized numerically and stored in ISMRMD format.  The five ISMRMRD raw data sets were reconstructed using three image reconstruction programs written in C++, Matlab, and Python.  The resulting images are shown above, from left to right Bruker, General Electric, Philips, Siemens, and the synthetic data set,  and from top to bottom C++, Matlab, and Python reconstruction programs.}
+\caption{An experimental demonstration where data sets were acquired on scanners from four vendors and converted from the vendor proprietary raw data file formats into ISMRMRD format.  A fifth data set was synthesized numerically and stored in ISMRMD format.  The five ISMRMRD raw data sets were reconstructed using three image reconstruction programs written in C++, Matlab, and Python.  The resulting images are shown above, from left to right Bruker, General Electric, Philips, Siemens, and the synthetic data set,  and from top to bottom C++, Matlab, and Python reconstruction programs.}
 \label{fig:demo}
 \end{figure}
 
-Our prototypical image research project began with an outline of the steps of the simple 2D image reconstruction algorithm algorithm:
+Our prototype image research project began with an outline of the steps of the simple 2D image reconstruction algorithm:
 \begin{enumerate}
 \item Data are read and stored in a buffer (Nkx,Nky,Ncoil).
 \item The fourier transform is computed on two dimensions (x,y).
