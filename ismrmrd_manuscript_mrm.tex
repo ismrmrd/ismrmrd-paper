@@ -66,7 +66,6 @@
 \newpage
 \clearpage
 \pagestyle{empty}
-\vspace*{20mm}
 
 \begin{center}
 \large \textbf{ISMRM Raw Data Format: A Proposed Standard for Sharing MRI Raw Datasets}
@@ -82,9 +81,9 @@ David C. Hansen$^4$,
 Chia-Ying Liu$^5$,
 David Atkinson$^6$,
 Peter Kellman$^7$,
-Sebastian Kozerke$^8$,
+Sebastian Kozerke$^9$,
 Hui Xue$^7$,
-Thomas S. Sorensen$^4$,
+Thomas S. Sorensen$^8$,
 Michael S. Hansen$^7$
 \end{center}
 
@@ -92,14 +91,15 @@ Michael S. Hansen$^7$
 \item National Institute of Mental Health, National Institutes of Health, Bethesda, MD
 \item Keller Center for Imaging Innovation, Barrow Neurological Institute, Phoenix, AZ
 \item National Institute of Neurologic Disease and Stroke, National Institutes of Health, Bethesda, MD
-\item Department of Computer Science, Aarhus University, Aarhus, Denmark
-\item Warren Grant Magnusson Clinical Center, National Institutes of Health, Bethesda, MD
+\item Department of Oncology, Aarhus University Hospital, Aarhus, Denmark
+\item Radiology and Imaging Sciences, Clinical Center, National Institutes of Health, Bethesda, MD
 \item Centre for Medical Image Computing, University College London, United Kingdom
 \item National Heart, Lung, and Blood Institute, National Institutes of Health, Bethesda, MD
+\item Department of Clinical Medicine, Aarhus University, Aarhus, Denmark
 \item Institute for Biomedical Engineering, University and ETH Zurich, Zurich, Switzerland
 \end{enumerate}
 
-\vspace{5mm}
+\vspace{2mm}
 Correspondence to: \\
 Souheil J. Inati \\
 National Institue of Mental Health, NIH \\
@@ -110,36 +110,22 @@ Bethesda, MD 20892 \\
 
 \textit{Running Head:  ISMRMRD}
 
-\vspace{5mm}
+\vspace{2mm}
 
 \textit{Submitted to Magnetic Resonance in Medicine} 
 
-% ------------------------------------------------------------------------
-%	Abbreviated Title Page
-% ------------------------------------------------------------------------
-\newpage
-\clearpage
-\pagenumbering{arabic} % begin numbering here
-\pagestyle{fancy}
-\begin{center}
-\vspace*{70mm}
-\large \textbf{ISMRM Raw Data Format: A Proposed Standard for Sharing MRI Raw Datasets} \\
-\end{center}
-\normalsize 
-
-\textit{Running Head:  ISMRMRD}
-
-\vspace{5mm}
-
-\textit{Submitted to Magnetic Resonance in Medicine} 
+\vspace{2mm}
 
 \textit{Word count: XXXX} % reported by texcount (total-abstract-top)
+
 
 % ------------------------------------------------------------------------
 %	Abstract
 % ------------------------------------------------------------------------
 \newpage
 \clearpage
+\pagenumbering{arabic} % begin numbering here
+\pagestyle{fancy}
 \doublespacing
 \section*{Abstract}
 \textbf{Purpose:} A common raw data format is advantageous for sharing MR image reconstruction algorithms and code, and is a valuable component of reproducible research.  Ideally, this common format would be vendor neutral, and would capture the data fields needed to describe the details of the MR experiment so as to permit image reconstruction from the raw data.  This work proposes the ISMRM Raw Data (ISMRMRD) format as an example of such a common raw data format, describes its design and implementation, and provides an example of its use in the context of reproducible research.\\
