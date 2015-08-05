@@ -144,7 +144,7 @@ Bethesda, MD 20892 \\
 \doublespacing
 \section*{Abstract}
 \textbf{Purpose:} A common raw data format is advantageous for sharing MR image reconstruction algorithms and code, and is a valuable component of reproducible research.  Ideally, this common format would be vendor neutral, and would capture the data fields needed to describe the details of the MR experiment so as to permit image reconstruction from the raw data.  This work proposes the ISMRM Raw Data (ISMRMRD) format as an example of such a common raw data format, describes its design and implementation, and provides an example of its use in the context of reproducible research.\\
-\textbf{Methods:} A file format consisting of a flexible header and tagged frames of k-space data and (optionally) trajectories was designed and  Application Programming Interfaces were implemented in C/C++, MATLAB and Python following an open source development model.  Converters for Bruker, General Electric, Philips and Siemens proprietary file formats were implemented in C++. The library and associated tools were compiled on Linux, Windows and Macintosh computers. Raw data were collected from a phantom on MRI scanners from the four different vendors, converted to ISMRMRD format, and reconstructed using a conventional 2D image reconstruction algorithm implemented in three programming languages (C++, MATLAB, Python).\\
+\textbf{Methods:} A file format consisting of a flexible header and tagged frames of k-space data and (optionally) trajectories was designed and  Application Programming Interfaces were implemented in C/C++, MATLAB and Python following an open source development model.  Converters for Bruker, General Electric, Philips and Siemens proprietary file formats were implemented in C++. The library and associated tools were compiled on Linux, Windows, and Apple computers. Raw data were collected from a phantom on MRI scanners from the four different vendors, converted to ISMRMRD format, and reconstructed using a conventional 2D image reconstruction algorithm implemented in three programming languages (C++, MATLAB, Python).\\
 \textbf{Results:} Images obtained by reconstructing the raw data from the four different vendors demonstrate the feasibility of this approach and the utility of the entire toolchain.  The source code, raw data, and images comprising this work were shared online, serving as an example of an image reconstruction project following a paradigm of reproducible research.\\
 \textbf{Conclusion:} The proposed raw data format solves a practical problem
 for the MRI community.  As this standard is refined, it may serve as a foundation upon which practitioners can base reproducible research and collaborations.  The ISMRMRD format is a completely open and community driven format and the scientific community is invited (including commercial vendors) to participate either as users of the format or as developers of the format or associated tools.
@@ -240,7 +240,7 @@ This work is implemented in three different programming environments or language
 \item{XSD Schema.} the file ismrmrd.xsd defines the schema for the XML header.
 \item{C library.}  This code defines fixed data structures (ismrmrd.h) and the functions used to interact with the HDF5 file.
 \item{C++ library.} This code is a wrapper around the C library with convenience classes and functions that provide memory management and reduce programming error.  It includes a ``hand crafted'' XML header binding class.  
-\item{Build system.} The C and C++ implementation use the CMake (Kitware) build configuration system in order to support multiple operating systems (Linux, Microsoft Windows, Apple OSX).
+\item{Build system.} The C and C++ implementation use the CMake (Kitware) build configuration system in order to support multiple operating systems (Linux, Microsoft Windows, Apple OS X).
 \item{MATLAB library.} This code consists of pure MATLAB data structures and functions (classes) which call the MATLAB interface to HDF5 as well as ``hand crafted'' Java code for the XML header binding class using the Java provided by MATLAB.
 \item{Python library.} This code consists of pure Python classes for the data structures, uses NumPy arrays for the data and the k-space trajectories (\url{http://www.numpy.org}, and an auto-generated XML header binding class.
 \end{itemize}
@@ -314,10 +314,10 @@ The source code for this project is being distributed in several git repositorie
 \item GE converter (currently private):\\
 	 \url{https://github.com/nih-fmrif/ge-tools} \\
 	 hash=f63f74e61e2f8bc920164aa5c8e6ef4dd22705b0
-\item Philips converter:\\
+\item Siemens converter:\\
 	 \url{http://github.com/ismrmrd/siemens_to_ismrmrd}\\
 	 hash=5a06e1c5eb3589f650d3c915675a3cab4da0c9e0
-\item Siemens converter: \\
+\item Philips converter: \\
 	\url{https://github.com/ismrmrd/philips_to_ismrmrd}\\
 	hash=b5256ed8267446e70059a5eea88ae6de59c12fe7
 \end{itemize}
