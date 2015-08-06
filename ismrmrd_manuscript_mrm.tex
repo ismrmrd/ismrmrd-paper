@@ -68,7 +68,7 @@
 \pagestyle{empty}
 
 \begin{center}
-\large \textbf{ISMRM Raw Data Format: A Proposed Standard for Sharing MRI Raw Datasets}
+\large \textbf{ISMRM Raw Data Format: A Proposed Standard for MRI Raw Datasets}
 
 \normalsize
 \singlespacing
@@ -130,7 +130,7 @@ Bethesda, MD 20892 \\
 \section*{Abstract}
 \textbf{Purpose:} A common raw data format is advantageous for sharing MR image reconstruction algorithms and code, and is a valuable component of reproducible research.  Ideally, this common format would be vendor neutral, and would capture the data fields needed to describe the details of the MR experiment so as to permit image reconstruction from the raw data.  This work proposes the ISMRM Raw Data (ISMRMRD) format as an example of such a common raw data format, describes its design and implementation, and provides an example of its use in the context of reproducible research.\\
 \textbf{Methods:} A file format consisting of a flexible header and tagged frames of k-space data and (optionally) trajectories was designed and  Application Programming Interfaces were implemented in C/C++, MATLAB and Python following an open source development model.  Converters for Bruker, General Electric, Philips and Siemens proprietary file formats were implemented in C++. The library and associated tools were compiled on Linux, Windows, and Apple computers. Raw data were collected from a phantom on MRI scanners from the four different vendors, converted to ISMRMRD format, and reconstructed using a conventional 2D image reconstruction algorithm implemented in three programming languages (C++, MATLAB, Python).\\
-\textbf{Results:} Images obtained by reconstructing the raw data from the four different vendors demonstrate the feasibility of this approach and the utility of the entire toolchain.  The source code, raw data, and images comprising this work were shared online, serving as an example of an image reconstruction project following a paradigm of reproducible research.\\
+\textbf{Results:} Images obtained by reconstructing the raw data from the four different vendors demonstrate the feasibility of this approach and the utility of the entire toolchain.  The source code, raw data, and images comprising this work are shared online, serving as an example of an image reconstruction project following a paradigm of reproducible research.\\
 \textbf{Conclusion:} The proposed raw data format solves a practical problem
 for the MRI community.  As this standard is refined, it may serve as a foundation upon which practitioners can base reproducible research and collaborations.  The ISMRMRD format is a completely open and community driven format and the scientific community is invited (including commercial vendors) to participate either as users of the format or as developers of the format or associated tools.
 
@@ -171,7 +171,7 @@ All software, data, figures, scripts to generate the figures, and the text itsel
 The ISMRMRD format combines a mix of flexible data structures (XML header) and fixed structures (equivalent to C-structs).  A minimal raw data set is depicted in fig.~\ref{fig:format} and consists of two sections:
 \begin{itemize}
 \item{XML header.} A flexible XML format document that can contain an arbitrary number of fields and accommodate everything from simple values (matrix sizes, etc.) to entire vendor protocols, etc. The purpose of this XML document is to provide parameters that may be meaningful for some experiments but not for others. This XML format is defined by an XML Schema Definition file (ismrmrd.xsd).
-\item{Raw data.} This section contains all the acquired data in the experiment organized as a sequence of data items.  Each data item corresponds to a single frame or chunk in an experiment, for example a single line of data in a cartesian acquisition or a single interleave in a multi-shot spiral acquisition. Each data item consists of a fixed size header (C-struct) with encoding numbers, etc., along with the k-space data for all of the acquired channels, and (optionally) the k-space trajectory as depicted in fig.~\ref{fig:cstruct}. The raw data structures are defined in a C/C++ header file (ismrmrd.h).
+\item{Raw data.} This section contains all the acquired data in the experiment organized as a sequence of data items.  Each data item corresponds to a single frame or chunk in an experiment, for example a single line of data in a Cartesian acquisition or a single interleave in a multi-shot spiral acquisition. Each data item consists of a fixed size header (C-struct) with encoding numbers, etc., along with the k-space data for all of the acquired channels, and (optionally) the k-space trajectory as depicted in fig.~\ref{fig:cstruct}. The raw data structures are defined in a C/C++ header file (ismrmrd.h).
 \end{itemize}
 The format also provides a simple image format for storing the product of reconstructions and a multi-dimensional array format for storing additional user-specified parameters (e.g. gradient non-linearity correction maps, etc.).
 
@@ -188,23 +188,23 @@ The format also provides a simple image format for storing the product of recons
 \begin{figure}
 \begin{center}
 \includegraphics[width=6in]{figure2_uml_diagram.eps}
-\caption{The raw data structure for each frame or chunk of the acquisition, consisting of a fixed size header with encoding numbers, location, etc. and the raw k-space data and (optionally) the k-space sampling locations.}
+\caption{The raw data structure for each frame or chunk of the acquisition, consisting of a fixed size header with encoding numbers, location, etc. and the raw k-space data and (optionally) the k-space sampling locations. \textbf{r} and \textbf{i} indicate the real and imaginary part of the data points respectively.}
 \label{fig:cstruct}
 \end{center}
 \end{figure}
 
-One of the key design features of the proposed format is the notion of an ``encoding space" which is a description of the type and limits of the experiment and provides the reconstruction program with the physical size and resolution of the imaging volume and the ranges of the data header labels.  An ISMRMRD dataset may contain data from several encoding spaces.  Each encoding space is described in the XML header and each acquisition (data chunk) is tagged with a label for the encoding space from which it was acquired. All encoding spaces have a trajectory type, an ``encodedSpace", a ``reconSpace", ``encodingLimits", and an optional trajectory description which can contain an arbitrary set of named parameters such as the gradient ramp and flat top times for EPI, or the parameters controlling the shape of the spiral trajectory, etc.  An example of an encoding describing a simple 2D cartesian acquisition is shown in fig.~\ref{fig:encoding}.  In this particular case, the encoding has the following description:
+One of the key design features of the proposed format is the notion of an ``encoding space" which is a description of the type and limits of the experiment and provides the reconstruction program with the physical size and resolution of the imaging volume and the ranges of the data header labels.  An ISMRMRD dataset may contain data from several encoding spaces.  Each encoding space is described in the XML header and each acquisition (data chunk) is tagged with a label for the encoding space from which it was acquired. All encoding spaces have a trajectory type, an ``encodedSpace", a ``reconSpace", ``encodingLimits", and an optional trajectory description which can contain an arbitrary set of named parameters such as the gradient ramp and flat top times for EPI, or the parameters controlling the shape of the spiral trajectory, etc.  An example of an encoding describing a simple 2D Cartesian acquisition is shown in fig.~\ref{fig:encoding}.  In this particular case, the encoding has the following description:
 \begin{itemize}
 \item the ``encodedSpace" section gives the matrix size ($32\times16\times1$) and field of view in mm ($600\times300\times10$) of the imaging volume encoded by the excitation, i.e. a 10~mm thick slice, 600~mm in x and 300~mm in y, encoded with a nominal matrix size of 32 in x and 16 in y, i.e. at a nominal resolution of 18.75mm.
 \item The ``reconSpace" section indicates that the image should be reconstructed on a smaller field of view ($300\times300\times10$), but with half the number of pixels in x.
 \item The combination of the ``encodedSpace" and ``reconSpace" indicate that the k-space data were acquired on a grid oversampled by a factor of 2 in the x direction.
-\item The ``encodingLimits" section indicates the ky center (5) and the minimum and maximum ky values (0 and 11 respectively), i.e. this is a partial fourier experiment, with a true pixel size that is somewhat larger than the nominal resolution, $min(ky)=-5$, $max(ky)=+6$.
+\item The ``encodingLimits" section indicates the ky center (5) and the minimum and maximum ky values (0 and 11 respectively), i.e. this is a partial Fourier experiment, with a true pixel size that is somewhat larger than the nominal resolution, $min(ky)=-5$, $max(ky)=+6$.
 \end{itemize}
-% Figure 2
+% Figure 3
 \begin{figure}
 \begin{center}
 \includegraphics[width=6in]{figure3_encoding_spaces.eps}
-\caption{The encoding space of a simple 2D cartesian acquisition.  The XML header describes the image encoding and reconstruction fields of view and matrix sizes and k-space sampling bounding box.  The image is acquired at a matrix size of 32 $\times$ 16 $\times$ 1 and field of view of 600mm $\times$ 300mm with a slice thickness of 10mm.  It should be reconstructed at a matrix size of 16 $\times$ 16 $\times$ 1 and field of view of 300mm $\times$ 300mm with a slice thickness of 10mm.   The k-space data were acquired on a grid oversampled by a factor of 2 in the x direction.  The ``encodingLimits" section indicates the ky center (5) and the minimum and maximum ky values (0 and 11 respectively), i.e. this is a partial Fourier experiment, with a true resolution that is somewhat larger than the nominal resolution, $min(ky)=-5$, $max(ky)=+6$.}
+\caption{The encoding space of a simple 2D Cartesian acquisition.  The XML header describes the image encoding and reconstruction fields of view and matrix sizes and k-space sampling bounding box.  The image is acquired at a matrix size of 32 $\times$ 16 $\times$ 1 and field of view of 600mm $\times$ 300mm with a slice thickness of 10mm.  It should be reconstructed at a matrix size of 16 $\times$ 16 $\times$ 1 and field of view of 300mm $\times$ 300mm with a slice thickness of 10mm.   The k-space data were acquired on a grid oversampled by a factor of 2 in the x direction.  The ``encodingLimits" section indicates the ky center (5) and the minimum and maximum ky values (0 and 11 respectively), i.e. this is a partial Fourier experiment, with a true pixel size that is somewhat larger than the nominal resolution, $min(ky)=-5$, $max(ky)=+6$. The example experiment also employs partial Fourier along the readout dimension, i.e. asymmetric echo.}
 \label{fig:encoding}
 \end{center}
 \end{figure}
@@ -243,7 +243,7 @@ It is worth emphasizing that these converters required some work and a good deal
 In a typical MR image reconstruction research project, one often tests and validates an algorithm or a particular implementation of an algorithm on simulated data and on data acquired from a phantom or from an in-vivo experiment.  In the interest of reproducible research, a scientist could then distribute the source code and the raw data sets that were used to generate the figures for the publication and perhaps additional code or data related to the testing or validation of the algorithm.
 This section demonstrates how one could use the ISMRMRD format and APIs for the development, implementation and testing of an image reconstruction algorithm suitable for 2D experiments.
 
-In this example, the k-space data are acquired using a multi-channel receiver array and the data are fully sampled on a cartesian grid.  The workflow for this demonstration project is a subset of a full development cycle:
+In this example, the k-space data are acquired using a multi-channel receiver array and the data are fully sampled on a Cartesian grid.  The workflow for this demonstration project is a subset of a full development cycle:
 \begin{enumerate}
 \item An initial implementation or proof of concept of the algorithm is implemented in a rapid prototyping language such as Matlab or Python.
 \item Synthetic data are generated in simulation and used to test/validate the prototype implementation.
@@ -265,12 +265,12 @@ In this example, the k-space data are acquired using a multi-channel receiver ar
 Our prototype image research project began with an outline of the steps of the simple 2D image reconstruction algorithm:
 \begin{enumerate}
 \item Data are read and stored in a buffer (Nkx,Nky,Ncoil).
-\item The fourier transform is computed on two dimensions (x,y).
-\item The images are chopped if the data were acquired on an oversampled grid in the frequency encode direction.
+\item The Fourier transform is computed on two dimensions (x,y).
+\item The images are cropped if the data were acquired on an oversampled grid in the frequency encode direction.
 \end{enumerate}
 The prototype implementation of this algorithm was written in Python (\texttt{do\_recon\_python.py}) and Matlab (\texttt{do\_recon\_matlab.m}).  The high performance implementation of the algorithm was written in C++ (\texttt{ismrmrd\_recon\_cartesian\_2d}).  All three implementations used the corresponding ISMRMRD APIs to read in an ISMRMRD format file and to save the reconstructed image.
 
-A synthetic data set in ISMRMRD format was generated using a program written in C++ (\texttt{ismrmrd\_generate\_cartesian\_shepp\_logan}).  This program simulated a simple experiment collecting data from a single slice object using an 8-element receive array in the presence of a small amount of noise.  The k-space data was generated by multiplying the Shepp-Logan phantom with the receive profile of an 8-rung birdcage coil followed by Fourier transformation and the addition of randomly generated white gaussian noise.
+A synthetic data set in ISMRMRD format was generated using a program written in C++ (\texttt{ismrmrd\_generate\_cartesian\_shepp\_logan}).  This program simulated a simple experiment collecting data from a single slice object using an 8-element receive array in the presence of a small amount of noise.  The k-space data was generated by multiplying the Shepp-Logan phantom with the receive profile of an 8-rung birdcage coil followed by Fourier transformation and the addition of randomly generated white Gaussian noise.
 
 Data sets were collected from a phantom (kiwi fruit) using scanners from four different vendors: 
 \begin{itemize}
@@ -314,7 +314,7 @@ The raw data in vendor proprietary formats and in ISMRMRD format are being distr
 \section*{Discussion and Conclusion}
 This work presents an initial version of a standard for storing raw MR data and have demonstrated an implementation that supports several common programming languages and operating systems. It has also been demonstrated that data can be converted to ISMRMRD from proprietary vendor formats. Once the data has been converted to a vendor independent format, generic reconstruction tools can be used to reconstruct data regardless of the scanner origin. The presented data converters are not complete for all proprietary configurations. However, the data converters are either completely available as open source or shared freely in the research communities associated with a specific vendor platform. Following the approach laid out in the source code for the data conversion software it should be a relatively simple task to accommodate other acquisition types. 
 
-The methods presented in this paper focused on 2D cartesian reconstruction examples for simplicity, but more sophisticated reconstruction systems also use the ISMRMRD format. For example, the Gadgetron \cite{Hansen:2013aa} framework uses the format as its internal data representation. The Graphical Programming Interface \cite{Zwart:2014aa} has also been used with the ISMRMRD format using a set of externally provided compute nodes (\url{https://github.com/hansenms/gpi_ismrmrd})
+The methods presented in this paper focused on 2D Cartesian reconstruction examples for simplicity, but more sophisticated reconstruction systems also use the ISMRMRD format. For example, the Gadgetron \cite{Hansen:2013aa} framework uses the format as its internal data representation. The Graphical Programming Interface \cite{Zwart:2014aa} has also been used with the ISMRMRD format using a set of externally provided compute nodes (\url{https://github.com/hansenms/gpi_ismrmrd})
 
 Future work will be focused on expanding the header sections in the flexible XML header to support specific applications.  Future changes to the fixed memory layout (C-struct) header and data may include capabilities to store arbitrary waveform data elements that could be used to capture detailed information about gradient waveforms or physiological telemetry. 
 
