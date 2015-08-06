@@ -116,7 +116,7 @@ Bethesda, MD 20892 \\
 
 \vspace{2mm}
 
-\textit{Word count: XXXX} % reported by texcount (total-abstract-top)
+\textit{Word count: 3900} % reported by texcount (total-abstract-top)
 
 
 % ------------------------------------------------------------------------
@@ -128,13 +128,12 @@ Bethesda, MD 20892 \\
 \pagestyle{fancy}
 \doublespacing
 \section*{Abstract}
-\textbf{Purpose:} A common raw data format is advantageous for sharing MR image reconstruction algorithms and code and is a valuable component of reproducible research.  Ideally, this common format would be vendor neutral and would capture the data fields needed to describe the details of the MR experiment so as to permit image reconstruction from the raw data.  This work proposes the ISMRM Raw Data (ISMRMRD) format as a common raw data format, describes its design and implementation, and provides an example of its use in the context of reproducible research.\\
-\textbf{Methods:} A file format consisting of a flexible header and tagged frames of k-space data and (optionally) trajectories was designed and  Application Programming Interfaces were implemented in C/C++, MATLAB, and Python following an open source development model.  Converters for Bruker, General Electric, Philips, and Siemens proprietary file formats were implemented in C++. The library and associated tools were compiled on Linux, Windows, and Apple computers. Raw data were collected from a phantom on MRI scanners from the four different vendors, converted to ISMRMRD format, and reconstructed using a conventional 2D image reconstruction algorithm implemented in three programming languages (C++, MATLAB, Python).\\
-\textbf{Results:} Images obtained by reconstructing the raw data from the four different vendors demonstrate the feasibility of this approach and the utility of the entire toolchain.  The source code, raw data, and images comprising this work are shared online, serving as an example of an image reconstruction project following a paradigm of reproducible research.\\
-\textbf{Conclusion:} The proposed raw data format solves a practical problem
-for the MRI community.  As this standard is refined, it may serve as a foundation upon which practitioners can base reproducible research and collaborations.  The ISMRMRD format is a completely open and community-driven format, and the scientific community is invited (including commercial vendors) to participate either as users of the format or as developers of the format or associated tools.
+\textbf{Purpose:}  This work proposes the ISMRM Raw Data (ISMRMRD) format as a common MR raw data format, which promotes algorithm and data sharing.\\
+\textbf{Methods:} A file format consisting of a flexible header and tagged frames of k-space data was designed. Application Programming Interfaces were implemented in C/C++, MATLAB, and Python. Converters for Bruker, General Electric, Philips, and Siemens proprietary file formats were implemented in C++. Raw data were collected using MRI scanners from four vendors, converted to ISMRMRD format, and reconstructed using software implemented in three programming languages (C++, MATLAB, Python).\\
+\textbf{Results:} Images were obtained by reconstructing the raw data from all vendors. The source code, raw data, and images comprising this work are shared online, serving as an example of an image reconstruction project following a paradigm of reproducible research.\\
+\textbf{Conclusion:} The proposed raw data format solves a practical problem for the MRI community.  It may serve as a foundation for reproducible research and collaborations.  The ISMRMRD format is a completely open and community-driven format, and the scientific community is invited (including commercial vendors) to participate either as users or developers.
 
-\textit{Abstract word count: XXX} % reported by texcount (abstract)
+\textit{Abstract word count: 197} % reported by texcount (abstract)
 
 % ------------------------------------------------------------------------
 %	Keywords
