@@ -13,3 +13,4 @@ old
 *.h5
 code/ismrmrd_data/
 *.zip
+*_hash.tex
