@@ -11,3 +11,5 @@ old
 *.fff
 *.lof
 *.h5
+code/ismrmrd_data/
+*.zip

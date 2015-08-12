@@ -1,3 +1,8 @@
+% 
+% For this code to work, you must add <ISMRMRD_SOURCE>/matlab to your path
+% You also need to download the test data
+%      https://github.com/ismrmrd/ismrmrd/releases/download/v1.2.3-data/ismrmrd_data.zip
+%   
 function do_recon_matlab()
 
 fnames = {'synth.h5', 'bruker.h5', 'ge.h5', 'philips.h5', 'siemens.h5'};

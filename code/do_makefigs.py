@@ -3,14 +3,23 @@ import matplotlib.pyplot as plt
 import ismrmrd
 import h5py
 
+def window_image(im,win_low=1,win_high=95):
+    imhist,bins = np.histogram(im.flatten(),100,normed=True)
+    im2 = im;
+    im2[im2 < bins[win_low]] = bins[win_low]
+    im2[im2 > bins[win_high]] = bins[win_high]
+    im2 = 255.0*(im2 - bins[win_low])/bins[win_high]
+    return im2
+
+
 fid = h5py.File('bruker.h5','r')
 bruk_cpp = np.squeeze(np.array(fid.get('/dataset/cpp/data')))
 bruk_mat = np.squeeze(np.array(fid.get('/dataset/matlab')))
 bruk_py  = np.squeeze(np.array(fid.get('/dataset/python')))
 fid.close()
-bruk_cpp *= 255/(0.9*np.max(bruk_cpp))
-bruk_mat *= 255/(0.9*np.max(bruk_mat))
-bruk_py  *= 255/(0.9*np.max(bruk_py))
+bruk_cpp = window_image(bruk_cpp)
+bruk_mat = window_image(bruk_mat)
+bruk_py = window_image(bruk_py)
 
 fid = h5py.File('ge.h5','r')
 ge_cpp = np.squeeze(np.array(fid.get('/dataset/cpp/data')))
@@ -19,38 +28,38 @@ ge_py  = np.squeeze(np.array(fid.get('/dataset/python')))
 fid.close()
 # GE-data has chop so artifact at the edge of the image
 ge_cpp[0:1,:]=ge_cpp[2,:]
-ge_cpp *= 255/(0.9*np.max(ge_cpp))
+ge_cpp = window_image(ge_cpp,win_low=20,win_high=50)
 ge_mat[0:1,:]=ge_mat[2,:]
-ge_mat *= 255/(0.9*np.max(ge_mat))
+ge_mat = window_image(ge_mat,win_low=20,win_high=50)
 ge_py[0:1,:]=ge_py[2,:]
-ge_py  *= 255/(0.9*np.max(ge_py))
+ge_py = window_image(ge_py,win_low=20,win_high=50)
 
 fid = h5py.File('philips.h5','r')
 phil_cpp = np.squeeze(np.array(fid.get('/dataset/cpp/data')))
 phil_mat = np.squeeze(np.array(fid.get('/dataset/matlab')))
 phil_py  = np.squeeze(np.array(fid.get('/dataset/python')))
 fid.close()
-phil_cpp *= 255/(0.9*np.max(phil_cpp))
-phil_mat *= 255/(0.9*np.max(phil_mat))
-phil_py  *= 255/(0.9*np.max(phil_py))
+phil_cpp = window_image(phil_cpp,win_low=12,win_high=75)
+phil_mat = window_image(phil_mat,win_low=12,win_high=75)
+phil_py = window_image(phil_py,win_low=12,win_high=75)
 
 fid = h5py.File('siemens.h5','r')
 siem_cpp = np.squeeze(np.array(fid.get('/dataset/cpp/data')))
 siem_mat = np.squeeze(np.array(fid.get('/dataset/matlab')))
 siem_py  = np.squeeze(np.array(fid.get('/dataset/python')))
 fid.close()
-siem_cpp *= 255/(0.9*np.max(siem_cpp))
-siem_mat *= 255/(0.9*np.max(siem_mat))
-siem_py  *= 255/(0.9*np.max(siem_py))
+siem_cpp = window_image(siem_cpp,win_low=12,win_high=65)
+siem_mat = window_image(siem_mat,win_low=12,win_high=65)
+siem_py = window_image(siem_py,win_low=12,win_high=65)
 
 fid = h5py.File('synth.h5','r')
 syn_cpp = np.squeeze(np.array(fid.get('/dataset/cpp/data')))
 syn_mat = np.squeeze(np.array(fid.get('/dataset/matlab')))
 syn_py  = np.squeeze(np.array(fid.get('/dataset/python')))
 fid.close()
-syn_cpp = 255/(0.9*np.max(syn_cpp)) * syn_cpp[::-1,:]
-syn_mat = 255/(0.9*np.max(syn_mat)) * syn_mat[::-1,:]
-syn_py  = 255/(0.9*np.max(syn_py))  * syn_py[::-1,:]
+syn_cpp = window_image(syn_cpp)
+syn_mat = window_image(syn_mat)
+syn_py  = window_image(syn_py)
 
 w, h = 5.,3.
 dw, dh = 0.75, 0.4
