@@ -19,6 +19,7 @@
 
 % For using s
 \usepackage{url}
+\urlstyle{same}
 
 % Citations are numbers, with round parenthesis
 % no brackets around numbers in the bibliography
@@ -125,7 +126,7 @@ Bethesda, MD 20892 \\
 \newpage
 \clearpage
 \pagenumbering{arabic} % begin numbering here
-\pagestyle{fancy}
+\pagestyle{plain}
 \doublespacing
 \section*{Abstract}
 \textbf{Purpose:}  This work proposes the ISMRM Raw Data (ISMRMRD) format as a common MR raw data format, which promotes algorithm and data sharing.\\
@@ -165,7 +166,7 @@ All software, data, figures, scripts to generate the figures, and the text in th
 % ------------------------------------------------------------------------
 %	Methods
 % ------------------------------------------------------------------------
-\section*{Architecture and Implementation}
+\section*{Methods}
 \subsection*{Design}
 The proposed ISMRMRD format combines a flexible header (XML-based) with fixed structures for the data. These are packaged together into a single file.  A minimal raw data set is depicted in Fig.~\ref{fig:format} and consists of two sections:
 \begin{itemize}
@@ -237,7 +238,7 @@ The converters for the aforementioned vendor formats were written in C++. Acquis
 
 It is worth emphasizing that creating the converters required significant work and special knowledge of the vendor formats. However, once code was developed for converting raw data from one pulse sequence on a particular platform, it was straightforward to modify this code to handle other sequences. It is expected that other developers can modify these converters to handle currently unsupported product sequences or their own research sequences. It is also important to note that while some users may work on the implementation of these vendor-specific converters, many users will simply use the converted ISMRMRD files as input for the algorithms and thus be exposed less to these vendor-specific details as a consequence of using the proposed format. 
 
-\section*{Experimental Demonstration}
+\subsection*{Experimental Demonstration}
 In a typical MR image reconstruction research project, one often tests and validates an algorithm or a particular implementation of an algorithm. This validation can be done using simulated data and data acquired from phantom or in vivo experiments.  In the interest of reproducible research, a scientist could distribute the source code and the raw data sets that were used to generate the figures for the publication and perhaps additional code or data related to the testing or validation of the algorithm.
 This section demonstrates how one could use the ISMRMRD format and APIs for the development, implementation, and testing of an image reconstruction algorithm suitable for 2D experiments.
 
@@ -250,15 +251,6 @@ In this example, the k-space data are acquired using a multi-channel receiver ar
 \item The synthetic and real data sets are used to test/validate the high performance implementation of the algorithm.
 \item The high-performance implementation of the algorithm is put into production in a clinical environment.
 \end{enumerate}
-
-% Figure 4
-\begin{figure}
-\begin{center}
-\includegraphics[width=6in]{figure4_recon_demo.eps}
-\end{center}
-\caption{An experimental demonstration where data sets were acquired on scanners from four vendors and converted from the vendor proprietary raw data file formats into ISMRMRD format.  A fifth data set was synthesized numerically and stored in ISMRMD format.  The five ISMRMRD raw data sets were reconstructed using three image reconstruction programs written in C++, Matlab, and Python.  The resulting images are shown above, from left to right Bruker, General Electric, Philips, Siemens, and the synthetic data set,  and from top to bottom C++, Matlab, and Python reconstruction programs.}
-\label{fig:demo}
-\end{figure}
 
 The prototype image research example project began with an outline of the steps of the simple 2D image reconstruction algorithm:
 \begin{enumerate}
@@ -277,7 +269,22 @@ Data sets were collected from a phantom (kiwi fruit) using scanners from four di
 \item Philips Achieva 3T with a 6-channel knee coil
 \item Siemens 3T Skyra with a 32-channel head coil
 \end{itemize}
-Data were acquired using product 2D pulse sequences.  The FOV=10~cm, slice thickness=2~mm, and matrix size (Nx=Ny=512) were matched, although no attempt was made to match the pulse sequence type or timings.  The raw data files were transferred off-line and converted into ISMRMRD using the vendor-specific converters described above.	The resulting are shown in Fig.\ref{fig:demo}.
+Data were acquired using product 2D pulse sequences.  The FOV=10~cm, slice thickness=2~mm, and matrix size (Nx=Ny=512) were matched, although no attempt was made to match the pulse sequence type or timings.
+
+\section*{Results}
+
+\subsection*{Experimental Demonstration}
+The raw data files were transferred off-line and converted into ISMRMRD using the vendor-specific converters described above. It was possible to convert the data from all four vendors. The resulting are shown in Fig.\ref{fig:demo}.
+
+% Figure 4
+\begin{figure}
+\begin{center}
+\includegraphics[width=6in]{figure4_recon_demo.eps}
+\end{center}
+\caption{An experimental demonstration where data sets were acquired on scanners from four vendors and converted from the vendor proprietary raw data file formats into ISMRMRD format.  A fifth data set was synthesized numerically and stored in ISMRMD format.  The five ISMRMRD raw data sets were reconstructed using three image reconstruction programs written in C++, Matlab, and Python.  The resulting images are shown above, from left to right Bruker, General Electric, Philips, Siemens, and the synthetic data set,  and from top to bottom C++, Matlab, and Python reconstruction programs.}
+\label{fig:demo}
+\end{figure}
+
 
 \subsection*{Source Code and Raw Data Dissemination}
 The source code for this project is being distributed in several git repositories hosted on GitHub at the URLs listed bellow.  The SHA-1 hashes uniquely identify the particular revision of each of the repositories used for the production of this manuscript:
