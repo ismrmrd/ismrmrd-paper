@@ -19,4 +19,4 @@ python do_makefigs.py
 mv *.eps ../figures
 
 # Clean up
-rm -f *.h5
+./do_clean.sh
