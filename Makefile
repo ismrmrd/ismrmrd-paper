@@ -1,29 +1,28 @@
 
-CURRENT_VERSION = ismrmrd_manuscript_mrm
-THE_GOAL	= ismrmrd_paper
-TARGETS		= $(THE_GOAL)
+THE_SOURCE = ismrmrd_manuscript_mrm.tex
+RESPONSE = ismrmrd_response
+THE_GOAL = ismrmrd_paper
 
 SHA1 = $(shell git rev-parse HEAD)
+$(shell echo $(SHA1)>githash.txt)
 
+# Run twice to get all references right
+ALL: $(RESPONSE) $(THE_GOAL)
 
-$(THE_GOAL).pdf: $(CURRENT_VERSION)_hash.tex
-	latex $(CURRENT_VERSION)_hash.tex
-	bibtex $(CURRENT_VERSION)_hash
-	latex $(CURRENT_VERSION)_hash.tex
-	latex $(CURRENT_VERSION)_hash.tex
-	dvipdf $(CURRENT_VERSION)_hash.dvi $(THE_GOAL).pdf
+$(RESPONSE):
+	pdflatex  -jobname $(RESPONSE) "\def\isresponse{1} \input{$(THE_SOURCE)}"
+	bibtex $(RESPONSE)
+	pdflatex  -jobname $(RESPONSE) "\def\isresponse{1} \input{$(THE_SOURCE)}"
+	pdflatex  -jobname $(RESPONSE) "\def\isresponse{1} \input{$(THE_SOURCE)}"
 
-$(CURRENT_VERSION)_hash.tex: $(CURRENT_VERSION).tex
-	sed -e s/MANUSCRIPT_SHA1/$(SHA1)/ $(CURRENT_VERSION).tex > $(CURRENT_VERSION)_hash.tex
-
-# so that when latex is re-run, it will get all references right
-
-update:
-	touch $(CURRENT_VERSION)_hash.tex
-
-really:
-	rm -f *.ps $(THE_GOAL).pdf $(CURRENT_VERSION).pdf
+$(THE_GOAL):
+	pdflatex  -jobname $(THE_GOAL) $(THE_SOURCE)
+	bibtex $(THE_GOAL)
+	pdflatex  -jobname $(THE_GOAL) $(THE_SOURCE)
+	pdflatex  -jobname $(THE_GOAL) $(THE_SOURCE)
 
 clean:
-	rm -f *~ *.bbl *.blg *.pdf *.log *.aux *.bak *.dvi *.sav *.out *.nav *.snm *.toc *.fff *.lof $(CURRENT_VERSION)_hash.tex
+	rm -f *~ *.bbl *.blg *.pdf *.log *.aux *.bak *.dvi *.sav *.out \
+	      *.nav *.snm *.toc *.fff *.lof *.tdo *.lox *.brf *.soc *.gz \
+          githash.txt
 
