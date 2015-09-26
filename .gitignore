@@ -14,3 +14,9 @@ old
 code/ismrmrd_data/
 *.zip
 *_hash.tex
+*.lox
+*.loc
+*.soc
+*.out
+*.toc
+githash.txt
