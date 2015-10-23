@@ -8,9 +8,11 @@
 
 # Matlab recon
 matlab -r do_recon_matlab
+matlab -r do_spiral_recon_matlab
 
 # Python recon
 python do_recon_python.py
+python do_epi_recon_python.py
 
 # Extract the PNGs
 python do_makefigs.py

@@ -2,7 +2,7 @@
 # In order to run this code, you must:
 # 1. Install the ismrmrd python api from:
 #     https://github.com/ismrmrd/ismrmrd-python
-# 2. Download the test data from https://github.com/ismrmrd/ismrmrd/releases/download/v1.2.3-data/ismrmrd_data.zip
+# 2. Download the test data (see do_get_data.sh)
 #
 
 import numpy as np

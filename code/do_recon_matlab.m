@@ -1,7 +1,6 @@
 % 
 % For this code to work, you must add <ISMRMRD_SOURCE>/matlab to your path
-% You also need to download the test data
-%      https://github.com/ismrmrd/ismrmrd/releases/download/v1.2.3-data/ismrmrd_data.zip
+% You also need to download the test data (see do_get_data.sh)
 %   
 function do_recon_matlab()
 

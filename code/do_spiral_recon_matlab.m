@@ -18,12 +18,9 @@
 %
 % Nominal trajectories: variable density spiral trajectories calculated using standard software
 
-
-
-
 function do_spiral_recon_matlab() 
 
-filename = 'ISMRMRD_Spiral.h5';
+filename = 'spiral.h5';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  Check that we have the necessary files  %
@@ -34,19 +31,25 @@ else
     error(['File ' filename ' does not exist.  Please generate it.'])
 end
 
-if (exist('vds.m','file')==2)
-    disp('vds.m is installed.'); 
-else
-    error('vds.m is not installed. Please visit http://www-mrsrl.stanford.edu/~brian/vdspiral/ to install');
-   
+if (exist('vds.m','file')~=2)
+    % try again using the shipped one
+    addpath(fullfile('extern','vdspiral'))
+    if (exist('vds.m','file')~=2)
+        error('vds.m is not installed. Please visit http://www-mrsrl.stanford.edu/~brian/vdspiral/ to install');
+    end
 end
+disp('vds.m is installed.'); 
 
-if (exist('nufft_init.m','file')==2 && exist('nufft_adj.m','file')==2)
-    disp('NUFFT toolbox is installed.'); 
-else
-    error('NUFFT toolbox is not installed. Please visit http://web.eecs.umich.edu/~fessler/irt/irt/nufft/ to install');
+if (exist('nufft_init.m','file')~=2 || exist('nufft_adj.m','file')~=2)
+    % try again using the shipped one
+    currfolder = cd(fullfile('extern','irt'));
+    setup;
+    cd(currfolder);
+    if (exist('nufft_init.m','file')~=2 || exist('nufft_adj.m','file')~=2)
+        error('NUFFT toolbox is not installed. Please visit http://web.eecs.umich.edu/~fessler/irt/irt/nufft/ to install');
+    end
 end
-
+disp('NUFFT toolbox is installed.'); 
     
 %%%%%%%%%%%%%%%
 %  Read data  %
@@ -143,5 +146,21 @@ axes('Position',[0.32 0.45 0.35 0.35]);
     imagesc(img_pl,[0 2.5]); axis image; axis off; colormap gray; title('ISMRMRD Trajectories','FontSize',16) 
 axes('Position',[0.62 0.45 0.35 0.35]);
     imagesc(img_pl_n-img_pl,[-1 1]); axis image; axis off; colormap gray; title('Difference image','FontSize',16) 
-    
+   
+%%%%%%%%%%%%%%%%%
+% Output images %
+%%%%%%%%%%%%%%%%%
+reconImages=zeros([size(img_pl_n),3]);
+reconImages(:,:,1)=img_pl_n;
+reconImages(:,:,2)=img_pl;
+reconImages(:,:,3)=img_pl_n-img_pl;
+% Append to the ismrmrd file as an NDArray
+h5create(filename,'/dataset/matlab',size(reconImages),'Datatype','single')
+h5write(filename,'/dataset/matlab',reconImages)
+
+% close up shop
+close all;
+
+exit;
+
 end
