@@ -415,6 +415,7 @@ One of the key design features of the proposed format is the notion of an ``enco
 \madded[R2.1]{Each acquisition data header depicted in Fig.~\ref{fig:cstruct}, contains a set of encoding counters: \\*
 \texttt{kspace\_encoding\_step\_1}, \texttt{slice}, etc. For a particular data set, the meaning of the encoding counters depends on the encoding space defined in the data set's XML header.  For the case of cartesian imaging, the mapping between ISMRMRD encoding counters and vendor specific dimensions is shown in Table~\ref{tab:counters}.}  \madded[R2.2]{The encoding counters also include a set of 8 integers and 8 floating point numbers that can be used an application specific way, for example they could refer to b-value and gradient direction in a diffusion weighted imaging sequence (see below).} \madded[R2.4]{Or one could use them to label data from a spectroscopy or spectroscopic imaging experiment.} \madded[R2.3]{Unfortunately, one of the natural counters for spectroscopy (\texttt{kspace\_encoding\_step\_0}) was omitted from version 1 of the acquisition data header; this oversight will be corrected in version 2.}
 
+%Table 1
 \begin{table}[htb]
 \begin{center}
 \begin{tabularx}{0.9\textwidth}{c | c | c | c | c}
@@ -441,10 +442,10 @@ segment & - & - & - & segment \\
 \madded[R1.4]{The maximum number of acquisitions per data set is $\approx 4\times10^6$ acquisitions because the \texttt{scan\_counter} is stored as a 32 bit unsigned integer.  This should be sufficient for current scanner technology.  Each acquisition can contain $65535$ samples because the \texttt{number\_of\_samples} is stored as a 16 bit unsigned integer.  Both of these counters could be increased up to 64 bits, which is the current limit imposed by the the HDF5 file format on the number of elements (acquisitions) in a dataset.}
 
 \subsubsection*{Flexibility vs. structure}
-\madded[R1.2]{One of the main design goals of the format is to strike a balance between flexibility and structure, providing sufficient flexibility to enable the development of novel data acquisition and image reconstruction methods, within a sufficiently well-specified structure that allows for the standardization of accepted methods.  It is necessary for the file format to specify a clear set of rules for data organization; this is achieved by the schema for the XML header and the definition of the data structures.  For example, for a data set to be valid, it must consist of a minimal ISMRMRD XML header, i.e. one instance of the experimentalConditions, and one encoding space, as well as some number of acquisitions.  More complexity is required to describe a spectroscopic imaging experiment, or a diffusion weighted imaging experiment, or an areterial spin labeling experiment, etc., and one would need to combine more information in the XML header and the encoding counters. For example, a data set acquired using a variable density spiral sequence would need to use the trajectory description portion of the encoding space.  The XML header for such an experiment is shown in Fig.~\ref{fig:spiralxml}.  The trajectory description provides an identifier and the set of parameters used in the trajectory design, and for this particular case, the encoding counter \texttt{kspace\_encoding\_step\_1} is used to indicate the interleaf number.  At this early stage, it is difficult to foresee the ways in which different practitioners will chose to use the format for their specific applications, and more importantly, the challenge is not technical, but rather sociological.  A consensus would need to emerge around the description of a particular type of experiment, and the community would need to agree on the meaning of the various parameters stored in the XML header and in the individual acquisition headers.  The file format itself is designed to provide a framework within which these discussions can take place.}
+\madded[R1.2]{One of the main design goals of the format is to strike a balance between flexibility and structure, providing sufficient flexibility to enable the development of novel data acquisition and image reconstruction methods, within a sufficiently well-specified structure that allows for the standardization of accepted methods.  It is necessary for the file format to specify a clear set of rules for data organization; this is achieved by the schema for the XML header and the definition of the data structures.  For example, for a data set to be valid, it must consist of a minimal ISMRMRD XML header, i.e. one instance of the experimentalConditions, and one encoding space, as well as some number of acquisitions.  More complexity is required to describe a spectroscopic imaging experiment, or a diffusion weighted imaging experiment, or an areterial spin labeling experiment, etc., and one would need to combine more information in the XML header and the encoding counters. For example, a data set acquired using a variable density spiral sequence would need to use the trajectory description portion of the encoding space.  The XML header for such an experiment is shown in Table~\ref{table:spiralxml}.  The trajectory description provides an identifier and the set of parameters used in the trajectory design, and for this particular case, the encoding counter \texttt{kspace\_encoding\_step\_1} is used to indicate the interleaf number.  At this early stage, it is difficult to foresee the ways in which different practitioners will chose to use the format for their specific applications, and more importantly, the challenge is not technical, but rather sociological.  A consensus would need to emerge around the description of a particular type of experiment, and the community would need to agree on the meaning of the various parameters stored in the XML header and in the individual acquisition headers.  The file format itself is designed to provide a framework within which these discussions can take place.}
 
-% Figure 4 Spiral XML Header
-\begin{figure}
+% Table 2 Spiral XML Header
+\begin{table}[htb]
 \begin{center}
 \begin{lstlisting}[language=XML, frame=BT, framesep=10pt, basicstyle=\small]
 <trajectory>spiral</trajectory>
@@ -484,9 +485,9 @@ segment & - & - & - & segment \\
 </trajectoryDescription>
 \end{lstlisting}
 \caption{XML header encoding space for a variable density spiral sequence, providing an identifier and the set of parameters used to generate the trajectory.  The reconstruction program would need to be programmed to use this information.}
-\label{fig:spiralxml}
+\label{table:spiralxml}
 \end{center}
-\end{figure}
+\end{table}
 
 \subsection*{ISMRMRD Library}
 The ISMRMRD library is a cross-platform implementation based on the \madded[R2.18]{domain-independent} Hierarchical Data Format (HDF) (\url{http://www.hdfgroup.org/HDF5}) for storage and provides C/C++, Python, and MATLAB (Mathworks) interfaces for reading and writing ISMRMRD files.  The project follows an open source development model with a website at (\url{http://ismrmrd.github.io}) and a discussion board and code repositories at \url{http://github.com/ismrmrd}.  The library and associated tools can be compiled in a straightforward way on Linux, Windows, and Apple computers.  This section provides a high-level description of the implementation and discuss some of the choices made during the development process.  The reader is encouraged to examine and experiment with the source code for more a detailed view.
@@ -586,7 +587,7 @@ The three data sets were stored in the same ISMRMRD file.  A reconstruction prog
 \subsection*{Experimental Demonstration}
 The raw data files were transferred off-line and converted into ISMRMRD using the vendor-specific converters described above. It was possible to convert the data from all four vendors. The resulting \madded[R2.25]{reconstructions} are shown in Fig.~\ref{fig:demo}.
 
-% Figure 5
+% Figure 4
 \begin{figure}
 \begin{center}
 \includegraphics[width=6in]{figure4_recon_demo.eps}
@@ -597,7 +598,7 @@ The raw data files were transferred off-line and converted into ISMRMRD using th
 
 \madded[R1.7]{Figure~\ref{fig:spiral} shows spiral images reconstructed using nominal and corrected variable density spiral trajectories. The corrected trajectories are predicted by the sequence ``on the fly" using system-specific calibration data and are stored in the ISMRMRD file along with the raw k-space data.  Images reconstructed with knowledge of the corrected trajectories are significantly less distorted and can be produced both in real-time or retrospectively.}
 
-% Figure 6
+% Figure 5
 \begin{figure}
 \begin{center}
 \includegraphics[width=6in]{figure5_spiral_demo.eps}
@@ -608,7 +609,7 @@ The raw data files were transferred off-line and converted into ISMRMRD using th
 
 \madded[R1.7]{Figure~\ref{fig:epi} shows images reconstructed from an accelerated EPI sequence.  Data from a fully encoded GRE sequence (not shown) were used to estimate the coil sensitivities.  Both data sets were stored in a single ISMRMRD file.}
 
-% Figure 7
+% Figure 6
 \begin{figure}
 \begin{center}
 \includegraphics[width=3in]{figure6_epi_demo.eps}
